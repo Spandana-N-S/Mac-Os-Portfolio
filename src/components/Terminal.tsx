@@ -1,6 +1,8 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, forwardRef, useImperativeHandle } from "react";
 import { cn } from "@/lib/utils";
 import { ProjectModal } from "./ProjectModal";
+import { SectionModal } from "./SectionModal";
+import { portfolioData } from "@/lib/portfolioData";
 
 interface TerminalLine {
   type: "input" | "output" | "error" | "loading";
@@ -11,169 +13,135 @@ interface TerminalProps {
   currentSection: string;
 }
 
-const portfolioData = {
-  about: {
-    name: "Your Name",
-    role: "Full Stack Developer",
-    bio: "Passionate developer with expertise in building modern web applications. I love creating elegant solutions to complex problems.",
-    location: "San Francisco, CA",
-    education: "B.S. Computer Science",
-  },
-  projects: [
-    {
-      name: "E-Commerce Platform",
-      description: "Full-stack e-commerce solution with React, Node.js, and PostgreSQL",
-      tech: ["React", "Node.js", "PostgreSQL", "Stripe"],
-      code: {
-        language: "typescript",
-        content: `// Payment processing with Stripe
-import Stripe from 'stripe';
-
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
-
-export async function createPaymentIntent(amount: number) {
-  try {
-    const paymentIntent = await stripe.paymentIntents.create({
-      amount: amount * 100, // Convert to cents
-      currency: 'usd',
-      automatic_payment_methods: {
-        enabled: true,
-      },
-    });
-    
-    return { clientSecret: paymentIntent.client_secret };
-  } catch (error) {
-    console.error('Payment error:', error);
-    throw error;
-  }
-}`,
-      },
-      preview: (
-        <div className="space-y-4">
-          <div className="flex items-center justify-between p-4 bg-card rounded-lg border">
-            <div>
-              <h3 className="font-semibold">Premium Headphones</h3>
-              <p className="text-sm text-muted-foreground">Wireless noise-cancelling</p>
-            </div>
-            <span className="text-xl font-bold">$299.99</span>
-          </div>
-          <button className="w-full bg-primary text-primary-foreground py-3 rounded-lg font-semibold hover:opacity-90 transition-opacity">
-            Add to Cart
-          </button>
-        </div>
-      ),
-    },
-    {
-      name: "Task Management App",
-      description: "Collaborative task management tool with real-time updates",
-      tech: ["React", "Firebase", "Tailwind CSS"],
-      code: {
-        language: "typescript",
-        content: `// Real-time task updates with Firebase
-import { collection, onSnapshot, query, where } from 'firebase/firestore';
-import { db } from './firebase-config';
-
-export function subscribeToTasks(userId: string, callback: (tasks: Task[]) => void) {
-  const q = query(
-    collection(db, 'tasks'),
-    where('userId', '==', userId)
-  );
-  
-  return onSnapshot(q, (snapshot) => {
-    const tasks = snapshot.docs.map(doc => ({
-      id: doc.id,
-      ...doc.data()
-    })) as Task[];
-    
-    callback(tasks);
-  });
-}`,
-      },
-      preview: (
-        <div className="space-y-3">
-          {["Design homepage mockups", "Implement user authentication", "Write API documentation"].map((task, i) => (
-            <div key={i} className="flex items-center gap-3 p-3 bg-card rounded-lg border hover:border-primary/50 transition-colors">
-              <input type="checkbox" className="w-4 h-4" defaultChecked={i === 0} />
-              <span className={cn("flex-1", i === 0 && "line-through text-muted-foreground")}>{task}</span>
-            </div>
-          ))}
-        </div>
-      ),
-    },
-    {
-      name: "Weather Dashboard",
-      description: "Beautiful weather forecast application with data visualization",
-      tech: ["React", "OpenWeather API", "Chart.js"],
-      code: {
-        language: "typescript",
-        content: `// Fetch weather data from OpenWeather API
-interface WeatherData {
-  temp: number;
-  description: string;
-  humidity: number;
-  windSpeed: number;
+export interface TerminalHandle {
+  handleCommand: (cmd: string) => void;
 }
 
-export async function fetchWeather(city: string): Promise<WeatherData> {
-  const apiKey = process.env.OPENWEATHER_API_KEY;
-  const url = \`https://api.openweathermap.org/data/2.5/weather?q=\${city}&appid=\${apiKey}&units=metric\`;
-  
-  const response = await fetch(url);
-  const data = await response.json();
-  
-  return {
-    temp: Math.round(data.main.temp),
-    description: data.weather[0].description,
-    humidity: data.main.humidity,
-    windSpeed: data.wind.speed,
-  };
-}`,
-      },
-      preview: (
-        <div className="bg-gradient-to-br from-blue-500 to-blue-700 p-6 rounded-lg text-white">
-          <h3 className="text-2xl font-bold mb-2">San Francisco</h3>
-          <div className="text-5xl font-bold mb-4">72°F</div>
-          <p className="text-blue-100 mb-4">Partly Cloudy</p>
-          <div className="grid grid-cols-2 gap-4 text-sm">
-            <div>
-              <span className="text-blue-200">Humidity</span>
-              <div className="font-semibold">65%</div>
-            </div>
-            <div>
-              <span className="text-blue-200">Wind</span>
-              <div className="font-semibold">12 mph</div>
-            </div>
-          </div>
-        </div>
-      ),
-    },
-  ],
-  skills: {
-    languages: ["JavaScript", "TypeScript", "Python", "SQL"],
-    frontend: ["React", "Vue.js", "Tailwind CSS", "Next.js"],
-    backend: ["Node.js", "Express", "PostgreSQL", "MongoDB"],
-    tools: ["Git", "Docker", "AWS", "Vercel"],
-  },
-  contact: {
-    email: "your.email@example.com",
-    github: "github.com/yourusername",
-    linkedin: "linkedin.com/in/yourusername",
-    twitter: "@yourusername",
-  },
-};
+const welcomeMessages = [
+  "Welcome to Nathishwar's Portfolio Terminal",
+  "Type 'help' to see available commands",
+  "Explore my projects, skills, and experiences",
+  "Use 'about' to learn more about me",
+  "Type 'projects' to view my work"
+];
 
-export const Terminal = ({ currentSection }: TerminalProps) => {
-  const [lines, setLines] = useState<TerminalLine[]>([
-    { type: "output", content: "Welcome to my portfolio terminal! Type 'help' for available commands." },
-  ]);
+export const Terminal = forwardRef<TerminalHandle, TerminalProps>(({ currentSection }, ref) => {
+  const [lines, setLines] = useState<TerminalLine[]>([]);
   const [input, setInput] = useState("");
   const [history, setHistory] = useState<string[]>([]);
   const [historyIndex, setHistoryIndex] = useState(-1);
   const [isLoading, setIsLoading] = useState(false);
   const [selectedProject, setSelectedProject] = useState<typeof portfolioData.projects[0] | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [currentModalSection, setCurrentModalSection] = useState<string | null>(null);
+  const [typingIndex, setTypingIndex] = useState(0);
+  const [typingCharIndex, setTypingCharIndex] = useState(0);
+  const [isTyping, setIsTyping] = useState(true);
+  const [responseLines, setResponseLines] = useState<TerminalLine[]>([]);
+  const [responseLineIndex, setResponseLineIndex] = useState(0);
+  const [responseCharIndex, setResponseCharIndex] = useState(0);
+  const [isResponseTyping, setIsResponseTyping] = useState(false);
   const terminalRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+
+  // Expose handleCommand method to parent components
+  useImperativeHandle(ref, () => ({
+    handleCommand,
+  }));
+
+  // Typing animation effect for welcome messages
+  useEffect(() => {
+    if (isTyping && typingIndex < welcomeMessages.length) {
+      const currentMessage = welcomeMessages[typingIndex];
+      
+      if (typingCharIndex < currentMessage.length) {
+        const timer = setTimeout(() => {
+          setLines(prev => {
+            const newLines = [...prev];
+            if (newLines[typingIndex]) {
+              newLines[typingIndex] = {
+                ...newLines[typingIndex],
+                content: currentMessage.substring(0, typingCharIndex + 1)
+              };
+            } else {
+              newLines.push({
+                type: "output",
+                content: currentMessage.substring(0, typingCharIndex + 1)
+              });
+            }
+            return newLines;
+          });
+          setTypingCharIndex(prev => prev + 1);
+        }, 30); // Typing speed
+        
+        return () => clearTimeout(timer);
+      } else {
+        // Move to next message after a delay
+        const timer = setTimeout(() => {
+          setTypingIndex(prev => prev + 1);
+          setTypingCharIndex(0);
+        }, 500);
+        
+        return () => clearTimeout(timer);
+      }
+    } else if (isTyping && typingIndex >= welcomeMessages.length) {
+      // Finished typing all messages
+      setIsTyping(false);
+      // Add a blank line at the end
+      setLines(prev => [...prev, { type: "output", content: "" }]);
+    }
+  }, [typingIndex, typingCharIndex, isTyping]);
+
+  // Typing animation effect for command responses
+  useEffect(() => {
+    if (isResponseTyping && responseLineIndex < responseLines.length) {
+      const currentLine = responseLines[responseLineIndex];
+      
+      if (responseCharIndex < currentLine.content.length) {
+        const timer = setTimeout(() => {
+          setLines(prev => {
+            const newLines = [...prev];
+            // Add the typed character to the last line
+            const lastIndex = newLines.length - 1;
+            if (lastIndex >= 0) {
+              newLines[lastIndex] = {
+                ...newLines[lastIndex],
+                content: currentLine.content.substring(0, responseCharIndex + 1)
+              };
+            }
+            return newLines;
+          });
+          setResponseCharIndex(prev => prev + 1);
+        }, 20); // Typing speed for responses
+        
+        return () => clearTimeout(timer);
+      } else {
+        // Move to next line after a delay
+        const timer = setTimeout(() => {
+          // Add a new line for the next response
+          if (responseLineIndex < responseLines.length - 1) {
+            setLines(prev => [...prev, { type: currentLine.type, content: "" }]);
+          }
+          setResponseLineIndex(prev => prev + 1);
+          setResponseCharIndex(0);
+        }, 300);
+        
+        return () => clearTimeout(timer);
+      }
+    } else if (isResponseTyping && responseLineIndex >= responseLines.length) {
+      // Finished typing all response lines
+      setIsResponseTyping(false);
+      // Add a blank line at the end for the next input
+      setLines(prev => [...prev, { type: "output", content: "" }]);
+    }
+  }, [responseLineIndex, responseCharIndex, isResponseTyping, responseLines]);
+
+  // Initialize with empty lines for typing
+  useEffect(() => {
+    if (lines.length === 0) {
+      setLines(welcomeMessages.map(() => ({ type: "output", content: "" })));
+    }
+  }, []);
 
   useEffect(() => {
     if (terminalRef.current) {
@@ -187,7 +155,8 @@ export const Terminal = ({ currentSection }: TerminalProps) => {
 
   useEffect(() => {
     if (currentSection !== "home") {
-      handleCommand(currentSection);
+      // Don't auto-trigger commands when section changes via dock
+      // The parent component will handle this
     }
   }, [currentSection]);
 
@@ -212,7 +181,19 @@ export const Terminal = ({ currentSection }: TerminalProps) => {
     
     // Execute the actual command after loading
     const output = executeCommand(cmd);
-    setLines((prev) => [...prev, ...output]);
+    // Start typing animation for the response
+    startResponseTyping(output);
+  };
+
+  const startResponseTyping = (lines: TerminalLine[]) => {
+    if (lines.length > 0) {
+      setResponseLines(lines);
+      setResponseLineIndex(0);
+      setResponseCharIndex(0);
+      setIsResponseTyping(true);
+      // Add the first empty line for typing
+      setLines(prev => [...prev, { type: lines[0].type, content: "" }]);
+    }
   };
 
   const executeCommand = (cmd: string): TerminalLine[] => {
@@ -224,6 +205,7 @@ export const Terminal = ({ currentSection }: TerminalProps) => {
       const projectIndex = parseInt(projectMatch[1]) - 1;
       if (projectIndex >= 0 && projectIndex < portfolioData.projects.length) {
         setSelectedProject(portfolioData.projects[projectIndex]);
+        setCurrentModalSection("project");
         setIsModalOpen(true);
         return [
           { type: "output", content: `Opening ${portfolioData.projects[projectIndex].name}...` },
@@ -249,13 +231,10 @@ export const Terminal = ({ currentSection }: TerminalProps) => {
         ];
 
       case "about":
+        setCurrentModalSection("about");
+        setIsModalOpen(true);
         return [
-          { type: "output", content: `Name: ${portfolioData.about.name}` },
-          { type: "output", content: `Role: ${portfolioData.about.role}` },
-          { type: "output", content: `Location: ${portfolioData.about.location}` },
-          { type: "output", content: `Education: ${portfolioData.about.education}` },
-          { type: "output", content: "" },
-          { type: "output", content: portfolioData.about.bio },
+          { type: "output", content: `Opening About section...` },
         ];
 
       case "projects":
@@ -275,23 +254,17 @@ export const Terminal = ({ currentSection }: TerminalProps) => {
         return projectLines;
 
       case "skills":
+        setCurrentModalSection("skills");
+        setIsModalOpen(true);
         return [
-          { type: "output", content: "Technical Skills:" },
-          { type: "output", content: "" },
-          { type: "output", content: `Languages: ${portfolioData.skills.languages.join(", ")}` },
-          { type: "output", content: `Frontend: ${portfolioData.skills.frontend.join(", ")}` },
-          { type: "output", content: `Backend: ${portfolioData.skills.backend.join(", ")}` },
-          { type: "output", content: `Tools: ${portfolioData.skills.tools.join(", ")}` },
+          { type: "output", content: `Opening Skills section...` },
         ];
 
       case "contact":
+        setCurrentModalSection("contact");
+        setIsModalOpen(true);
         return [
-          { type: "output", content: "Contact Information:" },
-          { type: "output", content: "" },
-          { type: "output", content: `Email: ${portfolioData.contact.email}` },
-          { type: "output", content: `GitHub: ${portfolioData.contact.github}` },
-          { type: "output", content: `LinkedIn: ${portfolioData.contact.linkedin}` },
-          { type: "output", content: `Twitter: ${portfolioData.contact.twitter}` },
+          { type: "output", content: `Opening Contact section...` },
         ];
 
       case "clear":
@@ -313,6 +286,7 @@ export const Terminal = ({ currentSection }: TerminalProps) => {
   const handleCommand = async (cmd: string) => {
     if (cmd.trim() === "") return;
     if (isLoading) return;
+    if (isResponseTyping) return; // Don't process new commands while typing response
 
     const newLines: TerminalLine[] = [
       ...lines,
@@ -322,13 +296,21 @@ export const Terminal = ({ currentSection }: TerminalProps) => {
     setLines(newLines);
     
     if (cmd.toLowerCase().trim() === "clear") {
-      setLines([]);
-    } else if (["about", "projects", "skills"].includes(cmd.toLowerCase().trim()) || cmd.toLowerCase().match(/^project\s+\d+$/)) {
+      setLines(isTyping ? 
+        welcomeMessages.map(() => ({ type: "output", content: "" })) : 
+        []);
+      // Reset response typing state
+      setIsResponseTyping(false);
+      setResponseLines([]);
+      setResponseLineIndex(0);
+      setResponseCharIndex(0);
+    } else if (["about", "projects", "skills", "contact"].includes(cmd.toLowerCase().trim()) || cmd.toLowerCase().match(/^project\s+\d+$/)) {
       // Show loading animation for these commands
       await showLoadingAnimation(cmd);
     } else {
       const output = executeCommand(cmd);
-      setLines([...newLines, ...output]);
+      // Start typing animation for the response
+      startResponseTyping(output);
     }
 
     setHistory([...history, cmd]);
@@ -390,6 +372,16 @@ export const Terminal = ({ currentSection }: TerminalProps) => {
               )}
             >
               {line.content}
+              {/* Cursor for welcome message typing */}
+              {isTyping && index === typingIndex && typingCharIndex < line.content.length && (
+                <span className="ml-1 animate-pulse">|</span>
+              )}
+              {/* Cursor for response typing */}
+              {isResponseTyping && index === lines.length - 1 && responseLineIndex < responseLines.length && 
+               responseLineIndex === index - (lines.length - responseLines.length) && 
+               responseCharIndex < line.content.length && (
+                <span className="ml-1 animate-pulse">|</span>
+              )}
             </div>
           ))}
 
@@ -405,18 +397,35 @@ export const Terminal = ({ currentSection }: TerminalProps) => {
               className="flex-1 bg-transparent text-terminal-foreground outline-none caret-terminal-cursor font-terminal"
               autoFocus
               spellCheck={false}
-              disabled={isLoading}
+              disabled={isLoading || isTyping || isResponseTyping}
             />
+            {(!isTyping && !isResponseTyping) && (
+              <span className="ml-1 animate-pulse">|</span>
+            )}
           </form>
         </div>
       </div>
 
       {/* Project Modal */}
-      <ProjectModal
-        open={isModalOpen}
-        onOpenChange={setIsModalOpen}
-        project={selectedProject}
-      />
+      {currentModalSection === "project" && (
+        <ProjectModal
+          open={isModalOpen}
+          onOpenChange={setIsModalOpen}
+          project={selectedProject}
+        />
+      )}
+
+      {/* Section Modal for About, Skills, Contact */}
+      {currentModalSection !== "project" && currentModalSection && (
+        <SectionModal
+          open={isModalOpen}
+          onOpenChange={setIsModalOpen}
+          section={currentModalSection}
+          data={portfolioData[currentModalSection as keyof typeof portfolioData]}
+        />
+      )}
     </>
   );
-};
+});
+
+Terminal.displayName = "Terminal";

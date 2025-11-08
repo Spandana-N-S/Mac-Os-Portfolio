@@ -5,14 +5,15 @@ interface DockItem {
   id: string;
   label: string;
   icon: React.ElementType;
+  command: string;
 }
 
 const dockItems: DockItem[] = [
-  { id: "home", label: "Home", icon: Home },
-  { id: "about", label: "About", icon: User },
-  { id: "projects", label: "Projects", icon: Briefcase },
-  { id: "skills", label: "Skills", icon: Wrench },
-  { id: "contact", label: "Contact", icon: Mail },
+  { id: "home", label: "Home", icon: Home, command: "" },
+  { id: "about", label: "About", icon: User, command: "about" },
+  { id: "projects", label: "Projects", icon: Briefcase, command: "projects" },
+  { id: "skills", label: "Skills", icon: Wrench, command: "skills" },
+  { id: "contact", label: "Contact", icon: Mail, command: "contact" },
 ];
 
 interface DockProps {
