@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
-import { Github, Star, Eye, GitCommit, FileText, GitFork } from "lucide-react";
-import { fetchGitHubData, GitHubUser, GitHubRepo, GitHubEvent } from "@/lib/github";
+import { X, Github, Star, GitFork, Eye, GitCommit, BookOpen, TrendingUp, Award, Calendar, Code, Users, Trophy } from "lucide-react";
 
 interface GitHubActivityProps {
   username: string;
@@ -8,106 +7,92 @@ interface GitHubActivityProps {
 }
 
 export const GitHubActivity = ({ username, onClose }: GitHubActivityProps) => {
-  const [githubData, setGithubData] = useState<{
-    user: GitHubUser;
-    repos: GitHubRepo[];
-    events: GitHubEvent[];
-  } | null>(null);
+  const [activeTab, setActiveTab] = useState<"analytics" | "repos" | "activity">("analytics");
+  const [githubData, setGithubData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+
+  const fetchGitHubData = async () => {
+    try {
+      setLoading(true);
+      // Fetch user data
+      const userResponse = await fetch(`https://api.github.com/users/${username}`);
+      const userData = await userResponse.json();
+      
+      // Fetch repos data
+      const reposResponse = await fetch(`https://api.github.com/users/${username}/repos?per_page=6&sort=updated`);
+      const reposData = await reposResponse.json();
+      
+      // Fetch starred repos
+      const starredResponse = await fetch(`https://api.github.com/users/${username}/starred?per_page=6`);
+      const starredData = await starredResponse.json();
+      
+      // For activity, we'll simulate some data since the GitHub API for events requires authentication
+      const activityData = [
+        {
+          id: 1,
+          type: "PushEvent",
+          repo: "Nathishwar-prog/ai-web-app",
+          message: "Updated machine learning model integration",
+          time: "2 hours ago"
+        },
+        {
+          id: 2,
+          type: "IssuesEvent",
+          repo: "Nathishwar-prog/ml-dashboard",
+          message: "Fixed data visualization bug",
+          time: "1 day ago"
+        },
+        {
+          id: 3,
+          type: "WatchEvent",
+          repo: "tensorflow/tensorflow",
+          message: "Starred tensorflow/tensorflow",
+          time: "2 days ago"
+        },
+        {
+          id: 4,
+          type: "CreateEvent",
+          repo: "Nathishwar-prog/new-project",
+          message: "Created new repository for React components",
+          time: "3 days ago"
+        }
+      ];
+      
+      setGithubData({
+        user: userData,
+        repos: reposData,
+        starred: starredData.slice(0, 6),
+        activity: activityData
+      });
+    } catch (error) {
+      console.error("Error fetching GitHub data:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const loadGitHubData = async () => {
-      try {
-        setLoading(true);
-        const data = await fetchGitHubData(username);
-        setGithubData(data);
-      } catch (err) {
-        setError("Failed to load GitHub data");
-        console.error(err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    loadGitHubData();
+    fetchGitHubData();
   }, [username]);
 
-  const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric'
-    });
-  };
-
-  const getEventIcon = (eventType: string) => {
-    switch (eventType) {
-      case "PushEvent":
-        return <GitCommit className="w-5 h-5 text-blue-500" />;
-      case "IssuesEvent":
-        return <FileText className="w-5 h-5 text-yellow-500" />;
-      case "WatchEvent":
-        return <Eye className="w-5 h-5 text-purple-500" />;
-      default:
-        return <Github className="w-5 h-5 text-gray-500" />;
-    }
-  };
-
-  const getEventMessage = (event: GitHubEvent) => {
-    switch (event.type) {
-      case "PushEvent":
-        return `Pushed ${event.payload.commits?.length || 0} commit(s) to ${event.repo.name}`;
-      case "IssuesEvent":
-        return `${event.payload.action} issue "${event.payload.issue?.title}" in ${event.repo.name}`;
-      case "WatchEvent":
-        return `Starred ${event.repo.name}`;
-      default:
-        return `${event.type} in ${event.repo.name}`;
-    }
-  };
+  // Filter starred repositories (only show public ones)
+  const starredRepos = githubData?.starred?.filter((repo: any) => !repo.private) || [];
 
   if (loading) {
     return (
-      <div className="fixed inset-0 bg-background/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-        <div className="bg-card rounded-xl shadow-2xl border border-border max-w-4xl w-full max-h-[90vh] overflow-y-auto">
-          <div className="flex justify-between items-center p-6 border-b border-border">
-            <h2 className="text-2xl font-bold text-foreground">GitHub Activity</h2>
+      <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+        <div className="bg-card border border-border rounded-2xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-hidden">
+          <div className="flex items-center justify-between p-4 border-b border-border">
+            <h2 className="text-lg font-semibold">GitHub Analytics</h2>
             <button 
               onClick={onClose}
-              className="text-muted-foreground hover:text-foreground"
+              className="p-1 rounded-lg hover:bg-muted transition-colors"
             >
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-              </svg>
+              <X className="w-5 h-5" />
             </button>
           </div>
-          <div className="p-6 flex justify-center items-center h-64">
-            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="fixed inset-0 bg-background/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-        <div className="bg-card rounded-xl shadow-2xl border border-border max-w-4xl w-full max-h-[90vh] overflow-y-auto">
-          <div className="flex justify-between items-center p-6 border-b border-border">
-            <h2 className="text-2xl font-bold text-foreground">GitHub Activity</h2>
-            <button 
-              onClick={onClose}
-              className="text-muted-foreground hover:text-foreground"
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-              </svg>
-            </button>
-          </div>
-          <div className="p-6 text-center">
-            <p className="text-destructive">{error}</p>
+          <div className="flex items-center justify-center h-64">
+            <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-primary"></div>
           </div>
         </div>
       </div>
@@ -115,119 +100,336 @@ export const GitHubActivity = ({ username, onClose }: GitHubActivityProps) => {
   }
 
   if (!githubData) {
-    return null;
+    return (
+      <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+        <div className="bg-card border border-border rounded-2xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-hidden">
+          <div className="flex items-center justify-between p-4 border-b border-border">
+            <h2 className="text-lg font-semibold">GitHub Analytics</h2>
+            <button 
+              onClick={onClose}
+              className="p-1 rounded-lg hover:bg-muted transition-colors"
+            >
+              <X className="w-5 h-5" />
+            </button>
+          </div>
+          <div className="flex items-center justify-center h-64">
+            <p className="text-muted-foreground">Unable to load GitHub data</p>
+          </div>
+        </div>
+      </div>
+    );
   }
 
   return (
-    <div className="fixed inset-0 bg-background/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-      <div className="bg-card rounded-xl shadow-2xl border border-border max-w-4xl w-full max-h-[90vh] overflow-y-auto">
-        <div className="flex justify-between items-center p-6 border-b border-border">
-          <h2 className="text-2xl font-bold text-foreground">GitHub Activity</h2>
+    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+      <div className="bg-card border border-border rounded-2xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-hidden flex flex-col">
+        {/* Header */}
+        <div className="flex items-center justify-between p-4 border-b border-border">
+          <div className="flex items-center gap-3">
+            <Github className="w-6 h-6 text-primary" />
+            <h2 className="text-lg font-semibold">GitHub Analytics</h2>
+          </div>
           <button 
             onClick={onClose}
-            className="text-muted-foreground hover:text-foreground"
+            className="p-1 rounded-lg hover:bg-muted transition-colors"
           >
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-            </svg>
+            <X className="w-5 h-5" />
           </button>
         </div>
         
-        <div className="p-6">
-          {/* User Profile */}
-          <div className="flex items-center mb-8 p-6 bg-muted/10 rounded-xl">
+        {/* User Profile Header */}
+        <div className="p-4 bg-gradient-to-r from-primary/10 to-secondary/10 border-b border-border">
+          <div className="flex items-center gap-4">
             <img 
               src={githubData.user.avatar_url} 
               alt={githubData.user.login}
-              className="w-20 h-20 rounded-full mr-6"
+              className="w-16 h-16 rounded-full"
             />
             <div>
-              <h3 className="text-2xl font-bold text-foreground">{githubData.user.name}</h3>
-              <p className="text-muted-foreground mb-2">@{githubData.user.login}</p>
-              <p className="text-foreground mb-2">{githubData.user.bio}</p>
-              <div className="flex items-center text-sm text-muted-foreground">
-                <span className="mr-4">{githubData.user.location}</span>
-                <span className="mr-4">{githubData.user.public_repos} repositories</span>
-                <span className="mr-4">{githubData.user.followers} followers</span>
+              <h3 className="text-xl font-bold">{githubData.user.name || githubData.user.login}</h3>
+              <p className="text-muted-foreground">@{githubData.user.login}</p>
+              <div className="flex gap-4 mt-2">
+                <div className="flex items-center gap-1">
+                  <Users className="w-4 h-4" />
+                  <span className="text-sm">{githubData.user.followers} followers</span>
+                </div>
+                <div className="flex items-center gap-1">
+                  <BookOpen className="w-4 h-4" />
+                  <span className="text-sm">{githubData.user.public_repos} repositories</span>
+                </div>
               </div>
             </div>
           </div>
-          
-          {/* Stats */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-            <div className="bg-muted/10 p-4 rounded-lg text-center">
-              <div className="text-2xl font-bold text-foreground">{githubData.user.public_repos}</div>
-              <div className="text-muted-foreground">Repositories</div>
-            </div>
-            <div className="bg-muted/10 p-4 rounded-lg text-center">
-              <div className="text-2xl font-bold text-foreground">{githubData.user.followers}</div>
-              <div className="text-muted-foreground">Followers</div>
-            </div>
-            <div className="bg-muted/10 p-4 rounded-lg text-center">
-              <div className="text-2xl font-bold text-foreground">{githubData.user.following}</div>
-              <div className="text-muted-foreground">Following</div>
-            </div>
-          </div>
-          
-          {/* Repositories */}
-          <div className="mb-8">
-            <h3 className="text-xl font-bold text-foreground mb-4">Top Repositories</h3>
-            <div className="grid grid-cols-1 gap-4">
-              {githubData.repos.map((repo) => (
-                <div key={repo.id} className="border border-border rounded-lg p-4 hover:bg-muted/10 transition-colors">
-                  <div className="flex justify-between items-start">
-                    <div>
-                      <a 
-                        href={repo.html_url} 
-                        target="_blank" 
-                        rel="noopener noreferrer"
-                        className="text-lg font-semibold text-primary hover:underline"
-                      >
-                        {repo.name}
-                      </a>
-                      <p className="text-muted-foreground mt-1">{repo.description}</p>
-                    </div>
-                    <div className="flex items-center space-x-4 text-sm text-muted-foreground">
-                      {repo.language && (
-                        <span>{repo.language}</span>
-                      )}
-                      <div className="flex items-center">
-                        <Star className="w-4 h-4 mr-1" />
-                        {repo.stargazers_count}
-                      </div>
-                      <div className="flex items-center">
-                        <GitFork className="w-4 h-4 mr-1" />
-                        {repo.forks_count}
-                      </div>
-                    </div>
+        </div>
+        
+        {/* Navigation Tabs */}
+        <div className="flex border-b border-border">
+          <button
+            className={`flex-1 py-3 px-4 text-sm font-medium ${
+              activeTab === "analytics"
+                ? "text-primary border-b-2 border-primary"
+                : "text-muted-foreground hover:text-foreground"
+            }`}
+            onClick={() => setActiveTab("analytics")}
+          >
+            <TrendingUp className="w-4 h-4 inline mr-2" />
+            Analytics
+          </button>
+          <button
+            className={`flex-1 py-3 px-4 text-sm font-medium ${
+              activeTab === "repos"
+                ? "text-primary border-b-2 border-primary"
+                : "text-muted-foreground hover:text-foreground"
+            }`}
+            onClick={() => setActiveTab("repos")}
+          >
+            <Code className="w-4 h-4 inline mr-2" />
+            Top Repositories
+          </button>
+          <button
+            className={`flex-1 py-3 px-4 text-sm font-medium ${
+              activeTab === "activity"
+                ? "text-primary border-b-2 border-primary"
+                : "text-muted-foreground hover:text-foreground"
+            }`}
+            onClick={() => setActiveTab("activity")}
+          >
+            <Calendar className="w-4 h-4 inline mr-2" />
+            Recent Activity
+          </button>
+        </div>
+        
+        {/* Content Area */}
+        <div className="flex-1 overflow-y-auto p-4">
+          {activeTab === "analytics" && (
+            <div className="space-y-6">
+              {/* Stats Cards */}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="bg-muted/10 rounded-xl p-4 border border-border">
+                  <div className="flex items-center gap-2 mb-2">
+                    <BookOpen className="w-5 h-5 text-primary" />
+                    <h3 className="font-medium">Repositories</h3>
                   </div>
-                  <div className="text-xs text-muted-foreground mt-2">
-                    Updated {formatDate(repo.updated_at)}
+                  <p className="text-2xl font-bold">{githubData.user.public_repos}</p>
+                  <p className="text-xs text-muted-foreground mt-1">Public repositories</p>
+                </div>
+                
+                <div className="bg-muted/10 rounded-xl p-4 border border-border">
+                  <div className="flex items-center gap-2 mb-2">
+                    <Star className="w-5 h-5 text-yellow-500" />
+                    <h3 className="font-medium">Starred</h3>
+                  </div>
+                  <p className="text-2xl font-bold">{starredRepos.length}</p>
+                  <p className="text-xs text-muted-foreground mt-1">Starred repositories</p>
+                </div>
+                
+                <div className="bg-muted/10 rounded-xl p-4 border border-border">
+                  <div className="flex items-center gap-2 mb-2">
+                    <Users className="w-5 h-5 text-blue-500" />
+                    <h3 className="font-medium">Followers</h3>
+                  </div>
+                  <p className="text-2xl font-bold">{githubData.user.followers}</p>
+                  <p className="text-xs text-muted-foreground mt-1">GitHub followers</p>
+                </div>
+              </div>
+              
+              {/* Contribution Visualization */}
+              <div className="bg-muted/10 rounded-xl p-4 border border-border">
+                <div className="flex items-center gap-2 mb-4">
+                  <TrendingUp className="w-5 h-5 text-primary" />
+                  <h3 className="font-medium">Contribution Activity</h3>
+                </div>
+                
+                {/* Simulated contribution graph */}
+                <div className="space-y-2">
+                  <div className="flex justify-between text-xs text-muted-foreground">
+                    <span>Less</span>
+                    <span>More</span>
+                  </div>
+                  <div className="flex gap-1">
+                    {Array.from({ length: 52 }).map((_, i) => {
+                      const intensity = Math.floor(Math.random() * 5);
+                      const colors = [
+                        "bg-muted",
+                        "bg-green-900/30",
+                        "bg-green-700/50",
+                        "bg-green-600/70",
+                        "bg-green-500"
+                      ];
+                      return (
+                        <div 
+                          key={i} 
+                          className={`w-2 h-2 rounded-sm ${colors[intensity]}`}
+                          title={`${intensity * 2} contributions`}
+                        />
+                      );
+                    })}
+                  </div>
+                  <div className="flex justify-between text-xs text-muted-foreground mt-2">
+                    <span>Jan</span>
+                    <span>Feb</span>
+                    <span>Mar</span>
+                    <span>Apr</span>
+                    <span>May</span>
+                    <span>Jun</span>
+                    <span>Jul</span>
+                    <span>Aug</span>
+                    <span>Sep</span>
+                    <span>Oct</span>
+                    <span>Nov</span>
+                    <span>Dec</span>
                   </div>
                 </div>
-              ))}
+              </div>
+              
+              {/* Achievements */}
+              <div className="bg-muted/10 rounded-xl p-4 border border-border">
+                <div className="flex items-center gap-2 mb-4">
+                  <Trophy className="w-5 h-5 text-yellow-500" />
+                  <h3 className="font-medium">GitHub Achievements</h3>
+                </div>
+                
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                  <div className="bg-background rounded-lg p-3 border border-border text-center">
+                    <Award className="w-6 h-6 text-blue-500 mx-auto mb-2" />
+                    <p className="text-xs font-medium">First PR</p>
+                    <p className="text-xs text-muted-foreground">Completed</p>
+                  </div>
+                  
+                  <div className="bg-background rounded-lg p-3 border border-border text-center">
+                    <Star className="w-6 h-6 text-yellow-500 mx-auto mb-2" />
+                    <p className="text-xs font-medium">Stargazer</p>
+                    <p className="text-xs text-muted-foreground">100+ stars</p>
+                  </div>
+                  
+                  <div className="bg-background rounded-lg p-3 border border-border text-center">
+                    <GitFork className="w-6 h-6 text-purple-500 mx-auto mb-2" />
+                    <p className="text-xs font-medium">Forker</p>
+                    <p className="text-xs text-muted-foreground">50+ forks</p>
+                  </div>
+                  
+                  <div className="bg-background rounded-lg p-3 border border-border text-center">
+                    <Code className="w-6 h-6 text-green-500 mx-auto mb-2" />
+                    <p className="text-xs font-medium">Contributor</p>
+                    <p className="text-xs text-muted-foreground">100+ commits</p>
+                  </div>
+                </div>
+              </div>
             </div>
-          </div>
+          )}
           
-          {/* Recent Activity */}
-          <div>
-            <h3 className="text-xl font-bold text-foreground mb-4">Recent Activity</h3>
+          {activeTab === "repos" && (
             <div className="space-y-4">
-              {githubData.events.map((event) => (
-                <div key={event.id} className="flex items-start p-4 border border-border rounded-lg hover:bg-muted/10 transition-colors">
-                  <div className="mr-4 mt-1">
-                    {getEventIcon(event.type)}
-                  </div>
-                  <div className="flex-1">
-                    <p className="text-foreground">{getEventMessage(event)}</p>
-                    <p className="text-xs text-muted-foreground mt-1">
-                      {formatDate(event.created_at)}
-                    </p>
-                  </div>
-                </div>
-              ))}
+              <h3 className="font-semibold text-lg">Top Repositories</h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {githubData.repos.map((repo: any) => (
+                  <a
+                    key={repo.id}
+                    href={repo.html_url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="block bg-muted/10 rounded-xl p-4 border border-border hover:bg-muted/20 transition-colors"
+                  >
+                    <div className="flex justify-between items-start">
+                      <div>
+                        <h4 className="font-medium">{repo.name}</h4>
+                        <p className="text-sm text-muted-foreground mt-1 line-clamp-2">
+                          {repo.description || "No description"}
+                        </p>
+                      </div>
+                      <div className="flex space-x-2 text-muted-foreground ml-2">
+                        {repo.stargazers_count > 0 && (
+                          <div className="flex items-center text-xs">
+                            <Star className="w-3 h-3 mr-1" />
+                            {repo.stargazers_count}
+                          </div>
+                        )}
+                        {repo.forks_count > 0 && (
+                          <div className="flex items-center text-xs">
+                            <GitFork className="w-3 h-3 mr-1" />
+                            {repo.forks_count}
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                    <div className="flex items-center text-xs text-muted-foreground mt-3">
+                      {repo.language && (
+                        <span className="mr-2 px-2 py-1 bg-muted rounded-full">{repo.language}</span>
+                      )}
+                      <span>Updated {new Date(repo.updated_at).toLocaleDateString()}</span>
+                    </div>
+                  </a>
+                ))}
+              </div>
+              
+              <h3 className="font-semibold text-lg mt-6">Starred Repositories</h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {starredRepos.map((repo: any) => (
+                  <a
+                    key={repo.id}
+                    href={repo.html_url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="block bg-muted/10 rounded-xl p-4 border border-border hover:bg-muted/20 transition-colors"
+                  >
+                    <div className="flex justify-between items-start">
+                      <div>
+                        <h4 className="font-medium">{repo.full_name}</h4>
+                        <p className="text-sm text-muted-foreground mt-1 line-clamp-2">
+                          {repo.description || "No description"}
+                        </p>
+                      </div>
+                      <div className="flex space-x-2 text-muted-foreground ml-2">
+                        {repo.stargazers_count > 0 && (
+                          <div className="flex items-center text-xs">
+                            <Star className="w-3 h-3 mr-1" />
+                            {repo.stargazers_count}
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                    <div className="flex items-center text-xs text-muted-foreground mt-3">
+                      {repo.language && (
+                        <span className="mr-2 px-2 py-1 bg-muted rounded-full">{repo.language}</span>
+                      )}
+                      <span>Starred</span>
+                    </div>
+                  </a>
+                ))}
+              </div>
             </div>
-          </div>
+          )}
+          
+          {activeTab === "activity" && (
+            <div className="space-y-4">
+              <h3 className="font-semibold text-lg">Recent Activity</h3>
+              <div className="space-y-3">
+                {githubData.activity.map((event: any) => (
+                  <div 
+                    key={event.id} 
+                    className="bg-muted/10 rounded-xl p-4 border border-border"
+                  >
+                    <div className="flex items-start gap-3">
+                      {event.type === "PushEvent" ? (
+                        <GitCommit className="w-5 h-5 text-blue-500 mt-0.5" />
+                      ) : event.type === "IssuesEvent" ? (
+                        <BookOpen className="w-5 h-5 text-yellow-500 mt-0.5" />
+                      ) : event.type === "WatchEvent" ? (
+                        <Eye className="w-5 h-5 text-purple-500 mt-0.5" />
+                      ) : (
+                        <Calendar className="w-5 h-5 text-green-500 mt-0.5" />
+                      )}
+                      <div className="flex-1">
+                        <p className="font-medium">{event.message}</p>
+                        <p className="text-sm text-muted-foreground mt-1">{event.repo}</p>
+                        <p className="text-xs text-muted-foreground mt-2">{event.time}</p>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>

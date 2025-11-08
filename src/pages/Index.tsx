@@ -22,7 +22,7 @@ const Index = () => {
     script.defer = true;
     script.setAttribute("data-chat-url", "https://bots.easy-peasy.ai/bot/6fc51d13-714c-4afd-bf29-1ef67377b663");
     script.setAttribute("data-btn-position", "bottom-left");
-    script.setAttribute("data-widget-btn-color", "#6366f1");
+    script.setAttribute("data-widget-btn-color", "#000000");
     script.id = "easy-peasy-bot-script";
     
     document.body.appendChild(script);

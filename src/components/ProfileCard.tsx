@@ -32,15 +32,6 @@ export const ProfileCard = ({
 }: ProfileCardProps) => {
   const [showGitHubActivity, setShowGitHubActivity] = useState(false);
 
-  const socialLinks = [
-    { icon: Github, url: `https://${github}`, label: "GitHub" },
-    { icon: Linkedin, url: `https://${linkedin}`, label: "LinkedIn" },
-    { icon: Twitter, url: `https://${twitter}`, label: "Twitter" },
-    { icon: Globe, url: `https://${website}`, label: "Website" },
-    { icon: Instagram, url: `https://${instagram}`, label: "Instagram" },
-    { icon: Mail, url: `mailto:${email}`, label: "Email" },
-  ];
-
   // Extract GitHub username from the URL
   const githubUsername = github.split('/').pop() || "nathishwar";
 
@@ -70,27 +61,14 @@ export const ProfileCard = ({
           <p className="text-foreground/80 text-center">{profileCardBio}</p>
         </div>
         
-        {/* Social Links */}
+        {/* See My Recent Works Button */}
         <div className="p-6 pt-0">
-          <div className="flex justify-center space-x-4">
-            {socialLinks.map((link, index) => {
-              const Icon = link.icon;
-              return (
-                <a
-                  key={index}
-                  href={link.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="w-10 h-10 rounded-full bg-muted flex items-center justify-center hover:bg-primary hover:text-primary-foreground transition-colors"
-                  aria-label={link.label}
-                >
-                  <Icon className="w-5 h-5" />
-                </a>
-              );
-            })}
-          </div>
-          
-          
+          <button 
+            onClick={() => setShowGitHubActivity(true)}
+            className="w-full py-3 bg-primary text-primary-foreground rounded-lg font-medium hover:opacity-90 transition-opacity"
+          >
+            See My Recent Works
+          </button>
         </div>
       </div>
 
