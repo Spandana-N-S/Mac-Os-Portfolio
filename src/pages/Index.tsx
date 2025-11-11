@@ -8,6 +8,10 @@ import { About } from "./About";
 import { Projects } from "./Projects";
 import { Skills } from "./Skills";
 import { Contact } from "./Contact";
+import { Resume } from "./Resume";
+import Experience from "./Experience";
+import Achievements from "./Achievements";
+import { Certificates } from "./Certificates";
 import { portfolioData } from "@/lib/portfolioData";
 
 const Index = () => {
@@ -22,7 +26,7 @@ const Index = () => {
     script.defer = true;
     script.setAttribute("data-chat-url", "https://bots.easy-peasy.ai/bot/6fc51d13-714c-4afd-bf29-1ef67377b663");
     script.setAttribute("data-btn-position", "bottom-left");
-    script.setAttribute("data-widget-btn-color", "#000000");
+    script.setAttribute("data-widget-btn-color", "#1F2D3D");
     script.id = "easy-peasy-bot-script";
     
     document.body.appendChild(script);
@@ -51,7 +55,11 @@ const Index = () => {
           about: "about",
           projects: "projects",
           skills: "skills",
-          contact: "contact"
+          contact: "contact",
+          resume: "resume",
+          experience: "experience",
+          achievements: "achievements",
+          certificates: "certificates"
         };
         
         const command = commandMap[section];
@@ -72,9 +80,17 @@ const Index = () => {
         return <Skills />;
       case "contact":
         return <Contact />;
+      case "resume":
+        return <Resume />;
+      case "experience":
+        return <Experience />;
+      case "achievements":
+        return <Achievements />;
+      case "certificates":
+        return <Certificates />;
       default:
         return (
-          <div className="flex h-full">
+          <div className="flex bg-gradient-to-br from-[#0d1a2b] via-[#1f2d3d] to-[#c3d4e0] bg-background bg-black  h-full">
             {/* Terminal Area - 75% width */}
             <div className="w-[75%] p-8 h-full">
               <Terminal 
@@ -84,7 +100,7 @@ const Index = () => {
             </div>
 
             {/* Profile Cards Area - 25% width */}
-            <div className="w-[25%] p-8 pl-0 flex flex-col gap-4 h-full">
+            <div className="w-[25%] p-8 pl-0 flex  flex-col gap-4 h-full">
               <div className="flex-[2] min-h-0">
                 <ProfileCard
                   name={portfolioData.about.name}
@@ -110,9 +126,9 @@ const Index = () => {
   };
 
   return (
-    <div className="flex h-screen w-full bg-background overflow-hidden">
+    <div className="flex h-screen w-full bg-background bg-black overflow-hidden">
       {/* Left Dock Sidebar */}
-      <div className="w-24 bg-gradient-to-b from-background to-muted/30 border-r border-border/50">
+      <div className="w-24 bg-gradient-to-b from-[#0d1a2b] via-[#1f2d3d] to-[#3c4b57] border-r border-border/50">
         <Dock activeSection={activeSection} onSectionChange={handleSectionChange} />
       </div>
 

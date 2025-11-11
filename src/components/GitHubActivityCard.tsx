@@ -103,15 +103,15 @@ export const GitHubActivityCard = () => {
   }
 
   return (
-    <div className="h-full flex flex-col bg-card border border-border rounded-2xl shadow-lg overflow-hidden">
+    <div className="h-full flex flex-col bg-gradient-to-br from-[#0D1A2B] via-[#1F2D3D] to-[#3C4B57] bg-card border border-border rounded-2xl shadow-lg overflow-hidden">
       <div className="p-4 bg-gradient-to-r from-primary/10 to-secondary/10 border-b border-border">
         <div className="flex items-center">
           <Github className="w-5 h-5 text-primary mr-2" />
-          <h3 className="font-semibold text-foreground text-sm">GitHub Analytics</h3>
+          <h3 className="font-semibold text-white text-sm">GitHub Analytics</h3>
         </div>
       </div>
       
-      <div className="flex flex-col md:flex-row flex-1 overflow-hidden">
+      <div className="flex flex-col md:flex-row flex-1 overflow-hidden bg-gradient-to-br from-[#0D1A2B] via-[#1F2D3D] to-[#3C4B57]">
         {/* Sidebar (30%) - User profile and stats */}
         <div className="w-full md:w-24 lg:w-32 border-b md:border-b-0 md:border-r border-border p-3 flex flex-row md:flex-col">
           {/* User Profile */}
@@ -128,14 +128,14 @@ export const GitHubActivityCard = () => {
           </div>
           
           {/* Stats */}
-          <div className="grid grid-cols-3 md:grid-cols-1 gap-2 mb-4 flex-1">
+          <div className="grid grid-cols-3 md:grid-cols-1 text-white gap-2 mb-4 flex-1">
             <div className="bg-muted/10 p-2 rounded text-center">
-              <div className="text-xs font-bold text-foreground">{githubData.user.public_repos}</div>
-              <div className="text-muted-foreground text-xs">Repos</div>
+              <div className="text-xs font-bold text-white">{githubData.user.public_repos}</div>
+              <div className="text-muted-foreground text-xs font-bold">Repos</div>
             </div>
             <div className="bg-muted/10 p-2 rounded text-center">
-              <div className="text-xs font-bold text-foreground">{githubData.user.followers}</div>
-              <div className="text-muted-foreground text-xs">Followers</div>
+              <div className="text-xs font-bold text-white">{githubData.user.followers}</div>
+              <div className="text-muted-foreground text-xs font-bold">Followers</div>
             </div>
             <div className="bg-muted/10 p-2 rounded text-center">
               <div className="text-xs font-bold text-foreground">{starredRepos.length}</div>
@@ -185,7 +185,7 @@ export const GitHubActivityCard = () => {
         <div className="flex-1 overflow-y-auto p-3">
           {activeTab === "repos" && (
             <div>
-              <h4 className="font-semibold text-foreground text-sm mb-2">Top Repositories</h4>
+              <h4 className="font-semibold text-white text-sm mb-2">Top Repositories</h4>
               <div className="space-y-2">
                 {githubData.repos.map((repo: any) => (
                   <a
@@ -195,31 +195,32 @@ export const GitHubActivityCard = () => {
                     rel="noopener noreferrer"
                     className="block p-2 rounded border border-border hover:bg-muted/10 transition-colors"
                   >
-                    <div className="flex justify-between items-start">
+                    <div className="flex text-white justify-between items-start">
                       <div>
-                        <h5 className="font-medium text-foreground text-xs truncate">{repo.name}</h5>
+                        <h5 className="font-medium text-white text-xs truncate text">{repo.name}</h5>
                         <p className="text-muted-foreground text-xs mt-1 truncate">
                           {repo.description || "No description"}
                         </p>
                       </div>
                       <div className="flex space-x-2 text-muted-foreground ml-2">
                         {repo.stargazers_count > 0 && (
-                          <div className="flex items-center text-xs">
+                          <div className="flex items-center text-xs text-white">
                             <Star className="w-3 h-3 mr-1" />
                             {repo.stargazers_count}
                           </div>
                         )}
                         {repo.forks_count > 0 && (
-                          <div className="flex items-center text-xs">
-                            <GitFork className="w-3 h-3 mr-1" />
+                          <div className="flex items-center text-xs text-white">
+                            <GitFork className="w-3 h-3 mr-1 text-white" />
                             {repo.forks_count}
                           </div>
                         )}
                       </div>
                     </div>
-                    <div className="flex items-center text-xs text-muted-foreground mt-1">
+                    <div className="flex items-center text-xs text-muted-foreground mt-1 text-green-600">
                       {repo.language && (
-                        <span className="mr-2 px-1 py-0.5 bg-muted rounded-full">{repo.language}</span>
+                        <span className="mr-2 px-1 py-0.5 bg-gradient-to-br from-[#0D1A2B] via-[#1F2D3D] to-[#3C4B57]
+ rounded-full font-bold">{repo.language}</span>
                       )}
                       <span>Updated {new Date(repo.updated_at).toLocaleDateString()}</span>
                     </div>

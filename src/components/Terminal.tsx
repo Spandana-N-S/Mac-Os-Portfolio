@@ -221,13 +221,17 @@ export const Terminal = forwardRef<TerminalHandle, TerminalProps>(({ currentSect
       case "help":
         return [
           { type: "output", content: "Available commands:" },
-          { type: "output", content: "  about      - Learn about me" },
-          { type: "output", content: "  projects   - View my projects" },
-          { type: "output", content: "  project N  - Open project details (e.g., 'project 1')" },
-          { type: "output", content: "  skills     - See my technical skills" },
-          { type: "output", content: "  contact    - Get my contact information" },
-          { type: "output", content: "  clear      - Clear the terminal" },
-          { type: "output", content: "  help       - Show this help message" },
+          { type: "output", content: "  about         - Learn about me" },
+          { type: "output", content: "  resume        - View my resume" },
+          { type: "output", content: "  projects      - View my projects" },
+          { type: "output", content: "  project N     - Open project details (e.g., 'project 1')" },
+          { type: "output", content: "  skills        - See my technical skills" },
+          { type: "output", content: "  experience    - View my work experience" },
+          { type: "output", content: "  achievements  - See my achievements and awards" },
+          { type: "output", content: "  certificates  - View my certifications" },
+          { type: "output", content: "  contact       - Get my contact information" },
+          { type: "output", content: "  clear         - Clear the terminal" },
+          { type: "output", content: "  help          - Show this help message" },
         ];
 
       case "about":
@@ -235,6 +239,13 @@ export const Terminal = forwardRef<TerminalHandle, TerminalProps>(({ currentSect
         setIsModalOpen(true);
         return [
           { type: "output", content: `Opening About section...` },
+        ];
+
+      case "resume":
+        setCurrentModalSection("resume");
+        setIsModalOpen(true);
+        return [
+          { type: "output", content: `Opening Resume section...` },
         ];
 
       case "projects":
@@ -258,6 +269,27 @@ export const Terminal = forwardRef<TerminalHandle, TerminalProps>(({ currentSect
         setIsModalOpen(true);
         return [
           { type: "output", content: `Opening Skills section...` },
+        ];
+
+      case "experience":
+        setCurrentModalSection("experience");
+        setIsModalOpen(true);
+        return [
+          { type: "output", content: `Opening Experience section...` },
+        ];
+
+      case "achievements":
+        setCurrentModalSection("achievements");
+        setIsModalOpen(true);
+        return [
+          { type: "output", content: `Opening Achievements section...` },
+        ];
+
+      case "certificates":
+        setCurrentModalSection("certificates");
+        setIsModalOpen(true);
+        return [
+          { type: "output", content: `Opening Certificates section...` },
         ];
 
       case "contact":
@@ -304,7 +336,7 @@ export const Terminal = forwardRef<TerminalHandle, TerminalProps>(({ currentSect
       setResponseLines([]);
       setResponseLineIndex(0);
       setResponseCharIndex(0);
-    } else if (["about", "projects", "skills", "contact"].includes(cmd.toLowerCase().trim()) || cmd.toLowerCase().match(/^project\s+\d+$/)) {
+    } else if (["about", "projects", "skills", "contact", "resume", "experience", "achievements", "certificates"].includes(cmd.toLowerCase().trim()) || cmd.toLowerCase().match(/^project\s+\d+$/)) {
       // Show loading animation for these commands
       await showLoadingAnimation(cmd);
     } else {
@@ -343,21 +375,21 @@ export const Terminal = forwardRef<TerminalHandle, TerminalProps>(({ currentSect
 
   return (
     <>
-      <div className="h-full flex flex-col bg-terminal-background rounded-2xl shadow-2xl overflow-hidden">
+      <div className="h-full flex flex-col bg-terminal-background bg-gradient-to-b from-[#0d1a2b] via-[#1f2d3d] to-[#3c4b57] rounded-2xl shadow-3xl overflow-hidden">
         {/* Window controls */}
-        <div className="flex items-center gap-2 px-4 py-3 bg-terminal-background/50 border-b border-terminal-foreground/10">
+        <div className="flex items-center gap-2 px-4 py-3 bg-gradient-to-b from-[#0d1a2b] via-[#1f2d3d] to-[#3c4b57]  border-b border-terminal-foreground/10">
           <div className="w-3 h-3 rounded-full bg-window-close" />
           <div className="w-3 h-3 rounded-full bg-window-minimize" />
           <div className="w-3 h-3 rounded-full bg-window-maximize" />
           <span className="ml-3 text-terminal-foreground/60 text-sm font-terminal">
-            portfolio-terminal
+            AI portfolio-terminal
           </span>
         </div>
 
         {/* Terminal content */}
         <div
           ref={terminalRef}
-          className="flex-1 overflow-y-auto p-4 font-terminal text-sm"
+          className="flex-1 bg-[#0B0C10] text-[#D1D5DB] overflow-y-auto p-4 font-terminal text-sm"
           onClick={() => inputRef.current?.focus()}
         >
           {lines.map((line, index) => (

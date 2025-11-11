@@ -1,63 +1,210 @@
-import { useState } from "react";
-import { portfolioData } from "@/lib/portfolioData";
+import SkillsOrbit from "@/components/SkillsOrbit";
+import React from "react";
 
-export const Skills = () => {
-  const [activeCategory, setActiveCategory] = useState("languages");
+// ---------------------------------------------------------------------
+// ✅ Types
+// ---------------------------------------------------------------------
+type SkillsCategory = Record<string, string[]>;
 
-  const categories = [
-    { id: "languages", name: "Languages" },
-    { id: "frontend", name: "Frontend" },
-    { id: "backend", name: "Backend" },
-    { id: "tools", name: "Tools" },
-  ];
+// ---------------------------------------------------------------------
+// ✅ Data
+// ---------------------------------------------------------------------
+const portfolioData = {
+  skills: {
+    "Languages & Frameworks": [
+      "JavaScript",
+      "TypeScript",
+      "Python",
+      "React",
+      "Node.js",
+      "Next.js",
+      "Vue.js",
+      "FastAPI",
+    ],
+    "Databases & DevOps": [
+      "SQL",
+      "MongoDB",
+      "PostgreSQL",
+      "Docker",
+      "Kubernetes",
+      "AWS",
+      "Git",
+    ],
+    "Styling & AI": ["Tailwind CSS", "TensorFlow", "PyTorch"],
+  },
+};
 
-  const getSkillsForCategory = (category: string) => {
-    switch (category) {
-      case "languages":
-        return portfolioData.skills.languages;
-      case "frontend":
-        return portfolioData.skills.frontend;
-      case "backend":
-        return portfolioData.skills.backend;
-      case "tools":
-        return portfolioData.skills.tools;
-      default:
-        return [];
-    }
-  };
+// ---------------------------------------------------------------------
+// ✅ Bottom Expandable Skills Card
+// ---------------------------------------------------------------------
+const BottomSkillsCard = ({ skills }: { skills: SkillsCategory }) => {
+  const [open, setOpen] = React.useState(false);
 
   return (
-    <div className="max-w-4xl mx-auto p-6">
-      <h1 className="text-3xl font-bold text-foreground mb-8 text-center">My Skills</h1>
-      
-      <div className="bg-card rounded-xl p-8 shadow-lg border border-border">
-        <div className="flex flex-wrap gap-2 mb-8 justify-center">
-          {categories.map((category) => (
-            <button
-              key={category.id}
-              onClick={() => setActiveCategory(category.id)}
-              className={`px-4 py-2 rounded-full transition-colors ${
-                activeCategory === category.id
-                  ? "bg-primary text-primary-foreground"
-                  : "bg-muted hover:bg-muted/80 text-foreground"
-              }`}
+    <div className="absolute right-6 bottom-6 w-80 text-[#E7ECF4] pointer-events-auto select-none">
+
+      {/* Toggle Button */}
+      <button
+        onClick={() => setOpen(!open)}
+        className="
+          w-full py-3 px-4 rounded-xl text-left font-medium tracking-wide
+          bg-gradient-to-br from-[#0D1A2B] via-[#1F2D3D] to-[#3C4B57]  border border-white/10 backdrop-blur-xl rounded-2xl shadow-xl shadow-black/40
+          shadow-lg shadow-black/40
+          hover:bg-white/20 transition 
+          ring-1 ring-white/10
+        "
+      >
+        {open ? "Hide Skills" : "View All Skills"}
+      </button>
+
+      {/* Expand Area */}
+      <div
+        className={`
+          overflow-hidden transition-all duration-500 ease-out
+          ${open ? "max-h-[460px] mt-4" : "max-h-0 mt-0"}
+        `}
+      >
+        <div
+          className="
+            p-5 rounded-2xl
+            bg-white/10 backdrop-blur-2xl 
+            border border-white/20 
+            shadow-2xl shadow-black/40
+            ring-1 ring-cyan-300/30
+            transform transition-all duration-500
+          "
+        >
+
+          {Object.entries(skills).map(([category, list]) => (
+            <div
+              key={category}
+              className="mb-6 last:mb-0"
             >
-              {category.name}
-            </button>
-          ))}
-        </div>
-        
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
-          {getSkillsForCategory(activeCategory).map((skill, index) => (
-            <div 
-              key={index}
-              className="bg-muted/50 p-4 rounded-lg text-center hover:bg-primary/10 transition-colors"
-            >
-              <div className="text-lg font-medium text-foreground">{skill}</div>
+              {/* Category Title */}
+              <h3 className="text-md font-semibold mb-3 text-cyan-200 tracking-wide">
+                {category}
+              </h3>
+
+              {/* Two-column layout */}
+              <ul className="grid grid-cols-2 gap-y-2 gap-x-4">
+                {list.map((item) => (
+                  <li
+                    key={item}
+                    className="
+                      flex items-center gap-2 text-[13px] font-medium
+                      hover:text-cyan-300 transition
+                    "
+                  >
+                    <div className="
+                      w-1.5 h-4 
+                      bg-cyan-300/80 
+                      shadow-[0_0_10px_3px_rgba(0,255,255,0.5)]
+                      rounded-sm
+                    "></div>
+                    {item}
+                  </li>
+                ))}
+              </ul>
             </div>
           ))}
+
         </div>
       </div>
+
     </div>
   );
 };
+
+// ---------------------------------------------------------------------
+// ✅ Main Component
+// ---------------------------------------------------------------------
+export const Skills = () => {
+
+  return (
+    <div
+      className="
+        relative
+        h-full min-h-screen overflow-y-auto p-8
+        bg-gradient-to-br from-[#0D1A2B] via-[#1F2D3D] to-[#3C4B57]
+        text-[#E7ECF4]
+        no-scrollbar
+      "
+    >
+
+      {/* Orbit */}
+      <div className="absolute inset-0 h-full z-0 pointer-events-auto">
+        <SkillsOrbit />
+      </div>
+
+      {/* Foreground */}
+      <div className="relative z-10 w-full h-full pointer-events-none">
+
+        {/* ------------------------------------------------------------------ */}
+        {/* ✅ TOP LEFT CARD (improved visuals) */}
+        {/* ------------------------------------------------------------------ */}
+        <div
+          className="
+            absolute top-2 left-10 w-64 rounded-2xl
+            bg-gradient-to-br from-[#0D1A2B] via-[#1F2D3D] to-[#3C4B57]  border border-white/10 backdrop-blur-xl rounded-2xl shadow-xl shadow-black/40
+            p-5 shadow-xl shadow-black/40 ring-1 ring-cyan-300/20
+          "
+        >
+          <h2 className="text-lg font-semibold mb-4 text-cyan-200">
+            Quick Info
+          </h2>
+
+          <div className="space-y-3">
+            {["Inner Orbit (Language & FrameWorks)", "Second Orbit(Styling & Database)", "Thrid Orbit(Devops & Tools)", "Fourth Orbit(Soft Skills)"].map((item) => (
+              <div
+                key={item}
+                className="
+                  flex items-center gap-3
+                  p-2 rounded-xl
+                  bg-white/5 hover:bg-white/10
+                  transition-all duration-300
+                  shadow-sm shadow-black/20
+                "
+              >
+                <div className="w-2 h-6 bg-cyan-100 shadow-[0_1px_10px_3px_rgba(0,255,255,0.4)]"></div>
+                <span className="text-sm">{item}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+        <div
+          className="
+    absolute top-1 right-1
+    pointer-events-none
+  "
+        >
+          <div
+            className="
+      pointer-events-auto
+      px-3 py-2 rounded-xl
+      bg-gradient-to-br from-[#0D1A2B] via-[#1F2D3D] to-[#3C4B57]  border border-white/10 backdrop-blur-xl rounded-2xl shadow-xl shadow-black/40
+      border border-white/20 
+      shadow-lg shadow-black/40
+      ring-1 ring-cyan-300/30
+      text-sm font-medium tracking-wide
+      text-cyan-200
+      hover:bg-white/20 transition
+    "
+          >
+            Till Now Explore more tools and tech
+            <span className="text-cyan-300"> • </span>
+            Exploring more in AI 
+          </div>
+        </div>
+
+        {/* ------------------------------------------------------------------ */}
+        {/* ✅ BOTTOM RIGHT SKILLS CARD */}
+        {/* ------------------------------------------------------------------ */}
+        <BottomSkillsCard skills={portfolioData.skills} />
+
+      </div>
+
+    </div>
+  );
+};
+
+export default Skills;

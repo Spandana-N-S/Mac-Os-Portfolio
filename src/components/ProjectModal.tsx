@@ -8,6 +8,7 @@ import javascript from "react-syntax-highlighter/dist/esm/languages/hljs/javascr
 import typescript from "react-syntax-highlighter/dist/esm/languages/hljs/typescript";
 import css from "react-syntax-highlighter/dist/esm/languages/hljs/css";
 import { cn } from "@/lib/utils";
+import { ECommercePreview, TaskManagerPreview, WeatherDashboardPreview } from "@/components/ProjectPreviews";
 
 SyntaxHighlighter.registerLanguage("javascript", javascript);
 SyntaxHighlighter.registerLanguage("typescript", typescript);
@@ -20,6 +21,8 @@ interface ProjectModalProps {
     name: string;
     description: string;
     tech: string[];
+    keyFeatures?: string[];
+    innovation?: string[];
     code?: {
       language: string;
       content: string;
@@ -47,6 +50,9 @@ export const ProjectModal = ({ open, onOpenChange, project }: ProjectModalProps)
     setIsFullscreen(false);
     onOpenChange(false);
   };
+
+  // Get the appropriate preview component based on project name
+
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -95,54 +101,79 @@ export const ProjectModal = ({ open, onOpenChange, project }: ProjectModalProps)
               ))}
             </div>
 
-            <Tabs defaultValue="preview" className="w-full">
-              <TabsList className="bg-terminal-background/50 border border-terminal-foreground/10">
-                <TabsTrigger 
-                  value="preview"
-                  className="data-[state=active]:bg-terminal-prompt/20 data-[state=active]:text-terminal-prompt"
-                >
-                  Live Preview
-                </TabsTrigger>
-                {project.code && (
-                  <TabsTrigger 
-                    value="code"
-                    className="data-[state=active]:bg-terminal-prompt/20 data-[state=active]:text-terminal-prompt"
-                  >
-                    Code
-                  </TabsTrigger>
-                )}
-              </TabsList>
+            <Tabs defaultValue="features" className="w-full">
+  <TabsList className="bg-terminal-background/50 border border-terminal-foreground/10">
+    <TabsTrigger 
+      value="features"
+      className="data-[state=active]:bg-terminal-prompt/20 data-[state=active]:text-terminal-prompt"
+    >
+      Key Features
+    </TabsTrigger>
 
-              <TabsContent value="preview" className="mt-4">
-                <div className="border border-terminal-foreground/20 rounded-lg p-4 bg-background min-h-[300px]">
-                  {project.preview || (
-                    <div className="flex items-center justify-center h-full text-muted-foreground">
-                      No preview available
-                    </div>
-                  )}
-                </div>
-              </TabsContent>
+    <TabsTrigger 
+      value="innovation"
+      className="data-[state=active]:bg-terminal-prompt/20 data-[state=active]:text-terminal-prompt"
+    >
+      Innovation
+    </TabsTrigger>
+  </TabsList>
 
-              {project.code && (
-                <TabsContent value="code" className="mt-4">
-                  <div className="rounded-lg overflow-hidden border border-terminal-foreground/20">
-                    <SyntaxHighlighter
-                      language={project.code.language}
-                      style={atomOneDark}
-                      customStyle={{
-                        margin: 0,
-                        borderRadius: "0.5rem",
-                        fontSize: "0.875rem",
-                        maxHeight: isFullscreen ? "calc(95vh - 300px)" : "400px",
-                      }}
-                      showLineNumbers
-                    >
-                      {project.code.content}
-                    </SyntaxHighlighter>
-                  </div>
-                </TabsContent>
-              )}
-            </Tabs>
+  {/* Key Features Content */}
+<TabsContent value="features" className="mt-4">
+  <div className="border border-terminal-foreground/20 rounded-lg p-4 bg-black min-h-[200px]">
+    <div className="flex flex-wrap gap-2">
+      {project.keyFeatures && project.keyFeatures.length > 0 ? (
+        project.keyFeatures.map((item, index) => (
+          <span
+            key={index}
+            className="
+              inline-block px-3 py-1 text-xs rounded-full 
+              bg-terminal-prompt/10 text-terminal-prompt 
+              border border-terminal-prompt/20 
+              font-medium
+            "
+          >
+            {item}
+          </span>
+        ))
+      ) : (
+        <span>No key features available</span>
+      )}
+    </div>
+  </div>
+</TabsContent>
+
+
+
+  {/* Innovation Content */}
+    <TabsContent value="innovation" className="mt-4">
+  <div className="border border-terminal-foreground/20 rounded-lg p-4 bg-black min-h-[200px]">
+
+    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 ">
+      {project.innovation && project.innovation.length > 0 ? (
+        project.innovation.map((item, index) => (
+          <span
+            key={index}
+            className="
+              inline-block px-3 py-2 text-xs rounded-lg 
+              bg-terminal-prompt/10 text-terminal-prompt 
+              border border-terminal-prompt/20 
+              font-medium
+            "
+          >
+            {item}
+          </span>
+        ))
+      ) : (
+        <span>No innovation details available</span>
+      )}
+    </div>
+
+  </div>
+</TabsContent>
+
+</Tabs>
+
           </div>
         )}
       </DialogContent>
