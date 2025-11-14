@@ -55,6 +55,8 @@ export const Terminal = forwardRef<TerminalHandle, TerminalProps>(({ currentSect
       const currentMessage = welcomeMessages[typingIndex];
       
       if (typingCharIndex < currentMessage.length) {
+        // Variable typing speed for more natural effect
+        const randomSpeed = Math.random() * 30 + 15; // Between 15-45ms
         const timer = setTimeout(() => {
           setLines(prev => {
             const newLines = [...prev];
@@ -72,15 +74,16 @@ export const Terminal = forwardRef<TerminalHandle, TerminalProps>(({ currentSect
             return newLines;
           });
           setTypingCharIndex(prev => prev + 1);
-        }, 30); // Typing speed
+        }, randomSpeed);
         
         return () => clearTimeout(timer);
       } else {
-        // Move to next message after a delay
+        // Move to next message after a delay with random pause
+        const randomPause = Math.random() * 300 + 200; // Between 200-500ms
         const timer = setTimeout(() => {
           setTypingIndex(prev => prev + 1);
           setTypingCharIndex(0);
-        }, 500);
+        }, randomPause);
         
         return () => clearTimeout(timer);
       }
@@ -173,9 +176,15 @@ export const Terminal = forwardRef<TerminalHandle, TerminalProps>(({ currentSect
     setIsLoading(true);
 
     for (const message of loadingMessages) {
-      await new Promise((resolve) => setTimeout(resolve, 300));
+      // Variable delay for more natural feel
+      const randomDelay = Math.random() * 400 + 100; // Between 100-500ms
+      await new Promise((resolve) => setTimeout(resolve, randomDelay));
       setLines((prev) => [...prev, { type: "loading", content: `[${new Date().toLocaleTimeString()}] ${message}` }]);
     }
+
+    // Add a completion message with a checkmark
+    await new Promise((resolve) => setTimeout(resolve, 300));
+    setLines((prev) => [...prev, { type: "output", content: `[${new Date().toLocaleTimeString()}] ✅ Loading complete` }]);
 
     setIsLoading(false);
     

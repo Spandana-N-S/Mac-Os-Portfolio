@@ -1,5 +1,5 @@
 import { Home, User, Code, Briefcase, Trophy, FileText, Award, Medal } from "lucide-react";
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef } from "react";
 
 interface DockProps {
   activeSection: string;
@@ -31,6 +31,11 @@ export const Dock = ({ activeSection, onSectionChange }: DockProps) => {
     return 1;
   };
 
+  // Calculate opacity for tooltip
+  const getTooltipOpacity = (index: number) => {
+    return hoveredIndex === index ? 1 : 0;
+  };
+
   return (
     <div
       ref={dockRef}
@@ -42,6 +47,7 @@ export const Dock = ({ activeSection, onSectionChange }: DockProps) => {
           const Icon = item.icon;
           const scale = getScale(index);
           const isHovered = hoveredIndex === index;
+          const tooltipOpacity = getTooltipOpacity(index);
 
           return (
             <button
@@ -49,8 +55,8 @@ export const Dock = ({ activeSection, onSectionChange }: DockProps) => {
               onClick={() => onSectionChange(item.id)}
               onMouseEnter={() => setHoveredIndex(index)}
               aria-label={item.label}
-              className={`p-3 rounded-xl transition-all duration-200 ease-out transform relative ${activeSection === item.id
-                  ? "bg-gradient-to-b from-[#0d1a2b] via-[#1f2d3d] to-[#3c4b57] text-primary shadow-sm"
+              className={`p-3 rounded-xl transition-all duration-300 ease-out transform relative ${activeSection === item.id
+                  ? "bg-gradient-to-b from-[#0d1a2b] via-[#1f2d3d] to-[#3c4b57] text-primary shadow-lg shadow-cyan-500/30"
                   : "text-muted-foreground hover:text-foreground"
                 }`}
               style={{
@@ -58,21 +64,24 @@ export const Dock = ({ activeSection, onSectionChange }: DockProps) => {
                 zIndex: isHovered ? 10 : 1,
               }}
             >
-              <Icon className="w-6 h-6 hover:text-white" />
+              <Icon className={`w-6 h-6 transition-all duration-300 ${isHovered ? 'text-cyan-400' : 'text-white'}`} />
               {/* Tooltip */}
               <span
                 className={`
     absolute left-full ml-4 top-1/2 -translate-y-1/2 
     px-2 py-1 text-white text-xs rounded whitespace-nowrap
     bg-gradient-to-b from-[#0d1a2b] via-[#1f2d3d] to-[#3c4b57]
-    opacity-0 transition-opacity duration-200 pointer-events-none
+    border border-cyan-500/30
+    transition-all duration-200 pointer-events-none
     z-[9999]                    
-    ${isHovered ? 'opacity-100' : ''}
   `}
+                style={{
+                  opacity: tooltipOpacity,
+                  transform: `translateY(-50%) translateX(${isHovered ? 0 : -10}px)`,
+                }}
               >
                 {item.label}
               </span>
-
             </button>
           );
         })}

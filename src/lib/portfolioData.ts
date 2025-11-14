@@ -154,8 +154,7 @@ When I’m not building, I love listening to music, vibecoding, exploring futuri
       title: "Gen AI-Tutor (Ruixen AI)",
       subtitle: "AI-powered tutoring platform for general knowledge and subject-specific topics",
       name: "Gen AI-Tutor (Ruixen AI)",
-      description:
-        ["AI-powered tutoring platform for general knowledge and subject-specific topics"],
+      description: "AI-powered tutoring platform for general knowledge and subject-specific topics",
       tech: ["React", "Node.js", "PostgreSQL", "Stripe", "OpenAI API", "Next.js"],
       live: "https://aitutor.knowgrow.tech",
       codeLink: "https://future-on-ai.neocities.org/noacesss",
@@ -183,7 +182,7 @@ When I’m not building, I love listening to music, vibecoding, exploring futuri
       title: "Task Management App",
       subtitle: "Collaborative task management tool with real-time updates",
       name: "Task Management App",
-      description: ["Collaborative task management tool with real-time updates"],
+      description: "Collaborative task management tool with real-time updates",
       tech: ["React", "Firebase", "Tailwind CSS"],
       live: "https://nathishwar.me",
       codeLink: "https://nathishwar.me",
@@ -223,8 +222,7 @@ export function subscribeToTasks(userId: string, callback: (tasks: Task[]) => vo
       title: "Weather Dashboard",
       subtitle: "Beautiful weather forecast application with data visualization",
       name: "Weather Dashboard",
-      description:
-        ["Beautiful weather forecast application with data visualization"],
+      description: "Beautiful weather forecast application with data visualization",
       tech: ["React", "OpenWeather API", "Chart.js"],
       live: "https://nathishwar.me",
       codeLink: "https://nathishwar.me",

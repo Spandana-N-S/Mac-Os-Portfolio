@@ -8,7 +8,7 @@ import React from 'react';
 // Image data using project assets - duplicated to fill sphere better
 const BASE_IMAGES: Omit<ImageData, 'id'>[] = [
     {
-    src: "https://images.unsplash.com/photo-1758178309498-036c3d7d73b3?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=987",
+    src: "./Perfect_dp_1.jpg",
     alt: "Image 1",
     title: "Mountain Landscape",
     description: "A beautiful landscape captured at golden hour with mountains in the background."

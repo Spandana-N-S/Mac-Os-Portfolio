@@ -65,7 +65,7 @@ export const About = () => {
               p-8 text-center border-b border-white/10
             ">
               <img 
-                src="/Nathishwar.jpg"
+                src="/Perfect_dp_1.jpg"
                 alt={portfolioData.about.name}
                 className="
                   w-50 h-32 rounded-full mx-auto mb-6 

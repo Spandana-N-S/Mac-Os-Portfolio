@@ -193,36 +193,45 @@ export const GitHubActivityCard = () => {
                     href={repo.html_url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="block p-2 rounded border border-border hover:bg-muted/10 transition-colors"
+                    className="block p-3 rounded-lg border border-border hover:bg-muted/20 transition-all duration-200 hover:shadow-md hover:border-cyan-500/50"
                   >
                     <div className="flex text-white justify-between items-start">
-                      <div>
-                        <h5 className="font-medium text-white text-xs truncate text">{repo.name}</h5>
+                      <div className="flex-1 min-w-0">
+                        <h5 className="font-medium text-white text-sm truncate">{repo.name}</h5>
                         <p className="text-muted-foreground text-xs mt-1 truncate">
                           {repo.description || "No description"}
                         </p>
                       </div>
                       <div className="flex space-x-2 text-muted-foreground ml-2">
                         {repo.stargazers_count > 0 && (
-                          <div className="flex items-center text-xs text-white">
+                          <div className="flex items-center text-xs text-yellow-400">
                             <Star className="w-3 h-3 mr-1" />
                             {repo.stargazers_count}
                           </div>
                         )}
                         {repo.forks_count > 0 && (
-                          <div className="flex items-center text-xs text-white">
-                            <GitFork className="w-3 h-3 mr-1 text-white" />
+                          <div className="flex items-center text-xs text-cyan-400">
+                            <GitFork className="w-3 h-3 mr-1" />
                             {repo.forks_count}
                           </div>
                         )}
                       </div>
                     </div>
-                    <div className="flex items-center text-xs text-muted-foreground mt-1 text-green-600">
+                    <div className="flex flex-wrap items-center text-xs text-muted-foreground mt-2 gap-2">
                       {repo.language && (
-                        <span className="mr-2 px-1 py-0.5 bg-gradient-to-br from-[#0D1A2B] via-[#1F2D3D] to-[#3C4B57]
- rounded-full font-bold">{repo.language}</span>
+                        <span className="px-2 py-1 bg-gradient-to-br from-[#0D1A2B] via-[#1F2D3D] to-[#3C4B57] rounded-full font-bold border border-cyan-500/20">
+                          <span className="flex items-center">
+                            <span className="w-2 h-2 rounded-full bg-cyan-500 mr-1"></span>
+                            {repo.language}
+                          </span>
+                        </span>
                       )}
                       <span>Updated {new Date(repo.updated_at).toLocaleDateString()}</span>
+                      {repo.private && (
+                        <span className="px-2 py-1 bg-purple-900/50 text-purple-300 rounded-full">
+                          Private
+                        </span>
+                      )}
                     </div>
                   </a>
                 ))}
@@ -240,29 +249,39 @@ export const GitHubActivityCard = () => {
                     href={repo.html_url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="block p-2 rounded border border-border hover:bg-muted/10 transition-colors"
+                    className="block p-3 rounded-lg border border-border hover:bg-muted/20 transition-all duration-200 hover:shadow-md hover:border-cyan-500/50"
                   >
                     <div className="flex justify-between items-start">
-                      <div>
-                        <h5 className="font-medium text-foreground text-xs truncate">{repo.full_name}</h5>
+                      <div className="flex-1 min-w-0">
+                        <h5 className="font-medium text-foreground text-sm truncate">{repo.full_name}</h5>
                         <p className="text-muted-foreground text-xs mt-1 truncate">
                           {repo.description || "No description"}
                         </p>
                       </div>
                       <div className="flex space-x-2 text-muted-foreground ml-2">
                         {repo.stargazers_count > 0 && (
-                          <div className="flex items-center text-xs">
+                          <div className="flex items-center text-xs text-yellow-400">
                             <Star className="w-3 h-3 mr-1" />
                             {repo.stargazers_count}
                           </div>
                         )}
                       </div>
                     </div>
-                    <div className="flex items-center text-xs text-muted-foreground mt-1">
+                    <div className="flex flex-wrap items-center text-xs text-muted-foreground mt-2 gap-2">
                       {repo.language && (
-                        <span className="mr-2 px-1 py-0.5 bg-muted rounded-full">{repo.language}</span>
+                        <span className="px-2 py-1 bg-muted rounded-full border border-cyan-500/20">
+                          <span className="flex items-center">
+                            <span className="w-2 h-2 rounded-full bg-cyan-500 mr-1"></span>
+                            {repo.language}
+                          </span>
+                        </span>
                       )}
                       <span>Starred</span>
+                      {repo.private && (
+                        <span className="px-2 py-1 bg-purple-900/50 text-purple-300 rounded-full">
+                          Private
+                        </span>
+                      )}
                     </div>
                   </a>
                 ))}
@@ -275,18 +294,18 @@ export const GitHubActivityCard = () => {
               <h4 className="font-semibold text-foreground text-sm mb-2">Recent Activity</h4>
               <div className="space-y-2">
                 {githubData.activity.map((event: any) => (
-                  <div key={event.id} className="p-2 rounded border border-border">
+                  <div key={event.id} className="p-3 rounded-lg border border-border hover:bg-muted/20 transition-all duration-200">
                     <div className="flex items-start">
                       {event.type === "PushEvent" ? (
-                        <GitCommit className="w-4 h-4 text-blue-500 mt-0.5 mr-2" />
+                        <GitCommit className="w-4 h-4 text-blue-500 mt-0.5 mr-2 flex-shrink-0" />
                       ) : event.type === "IssuesEvent" ? (
-                        <BookOpen className="w-4 h-4 text-yellow-500 mt-0.5 mr-2" />
+                        <BookOpen className="w-4 h-4 text-yellow-500 mt-0.5 mr-2 flex-shrink-0" />
                       ) : (
-                        <Eye className="w-4 h-4 text-purple-500 mt-0.5 mr-2" />
+                        <Eye className="w-4 h-4 text-purple-500 mt-0.5 mr-2 flex-shrink-0" />
                       )}
-                      <div className="flex-1">
-                        <p className="text-foreground text-xs">{event.message}</p>
-                        <p className="text-muted-foreground text-xs mt-1">{event.repo}</p>
+                      <div className="flex-1 min-w-0">
+                        <p className="text-foreground text-sm">{event.message}</p>
+                        <p className="text-muted-foreground text-xs mt-1 truncate">{event.repo}</p>
                         <p className="text-muted-foreground text-xs mt-1">{event.time}</p>
                       </div>
                     </div>

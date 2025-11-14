@@ -1,47 +1,16 @@
 import SkillsOrbit from "@/components/SkillsOrbit";
+import { SkillsVisualization } from "@/components/SkillsVisualization";
+import { portfolioData } from "@/lib/portfolioData";
 import React from "react";
-
-// ---------------------------------------------------------------------
-// ✅ Types
-// ---------------------------------------------------------------------
-type SkillsCategory = Record<string, string[]>;
-
-// ---------------------------------------------------------------------
-// ✅ Data
-// ---------------------------------------------------------------------
-const portfolioData = {
-  skills: {
-    "Languages & Frameworks": [
-      "JavaScript",
-      "TypeScript",
-      "Python",
-      "React",
-      "Node.js",
-      "Next.js",
-      "Vue.js",
-      "FastAPI",
-    ],
-    "Databases & DevOps": [
-      "SQL",
-      "MongoDB",
-      "PostgreSQL",
-      "Docker",
-      "Kubernetes",
-      "AWS",
-      "Git",
-    ],
-    "Styling & AI": ["Tailwind CSS", "TensorFlow", "PyTorch"],
-  },
-};
 
 // ---------------------------------------------------------------------
 // ✅ Bottom Expandable Skills Card
 // ---------------------------------------------------------------------
-const BottomSkillsCard = ({ skills }: { skills: SkillsCategory }) => {
+const BottomSkillsCard = ({ skills }: { skills: any }) => {
   const [open, setOpen] = React.useState(false);
 
   return (
-    <div className="absolute right-6 bottom-6 w-80 text-[#E7ECF4] pointer-events-auto select-none">
+    <div className="absolute right-6 bottom-6 w-100 text-[#E7ECF4] pointer-events-auto select-none">
 
       {/* Toggle Button */}
       <button
@@ -61,7 +30,7 @@ const BottomSkillsCard = ({ skills }: { skills: SkillsCategory }) => {
       <div
         className={`
           overflow-hidden transition-all duration-500 ease-out
-          ${open ? "max-h-[460px] mt-4" : "max-h-0 mt-0"}
+          ${open ? "max-h-[800px] mt-4" : "max-h-0 mt-0"}
         `}
       >
         <div
@@ -74,40 +43,7 @@ const BottomSkillsCard = ({ skills }: { skills: SkillsCategory }) => {
             transform transition-all duration-500
           "
         >
-
-          {Object.entries(skills).map(([category, list]) => (
-            <div
-              key={category}
-              className="mb-6 last:mb-0"
-            >
-              {/* Category Title */}
-              <h3 className="text-md font-semibold mb-3 text-cyan-200 tracking-wide">
-                {category}
-              </h3>
-
-              {/* Two-column layout */}
-              <ul className="grid grid-cols-2 gap-y-2 gap-x-4">
-                {list.map((item) => (
-                  <li
-                    key={item}
-                    className="
-                      flex items-center gap-2 text-[13px] font-medium
-                      hover:text-cyan-300 transition
-                    "
-                  >
-                    <div className="
-                      w-1.5 h-4 
-                      bg-cyan-300/80 
-                      shadow-[0_0_10px_3px_rgba(0,255,255,0.5)]
-                      rounded-sm
-                    "></div>
-                    {item}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
-
+          <SkillsVisualization skills={skills} />
         </div>
       </div>
 
