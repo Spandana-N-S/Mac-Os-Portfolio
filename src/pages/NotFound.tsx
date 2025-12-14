@@ -11,10 +11,10 @@ const NotFound = () => {
   return (
     <div className="flex min-h-screen items-center justify-center bg-gray-100">
       <div className="text-center">
-        <h1 className="mb-4 text-4xl font-bold">404</h1>
-        <p className="mb-4 text-xl text-gray-600">Oops! Page not found</p>
+        <h1 className="mb-4 text-4xl font-bold">Hey ! You came to wrong place</h1>
+        <p className="mb-4 text-xl text-gray-600">You can go back to home</p>
         <a href="/" className="text-blue-500 underline hover:text-blue-700">
-          Return to Home
+          Hit me Bro Let's go back to home
         </a>
       </div>
     </div>

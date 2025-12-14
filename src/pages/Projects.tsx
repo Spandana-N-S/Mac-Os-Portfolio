@@ -98,6 +98,7 @@ export const Projects = () => {
                 ))}
               </select>
             </div>
+            <button className="border border-white/20 rounded-lg px-4 py-2" onClick={() => window.open("https://nathishwar-projects.netlify.app/", "_blank")}>View All Projects</button>
           </div>
 
           {/* PROJECT GRID */}

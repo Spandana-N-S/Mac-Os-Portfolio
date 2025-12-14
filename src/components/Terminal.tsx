@@ -3,6 +3,8 @@ import { cn } from "@/lib/utils";
 import { ProjectModal } from "./ProjectModal";
 import { SectionModal } from "./SectionModal";
 import { portfolioData } from "@/lib/portfolioData";
+import { config } from "@/lib/config";
+import { useTheme } from "@/context/ThemeContext";
 
 interface TerminalLine {
   type: "input" | "output" | "error" | "loading";
@@ -17,12 +19,11 @@ export interface TerminalHandle {
   handleCommand: (cmd: string) => void;
 }
 
-const welcomeMessages = [
-  "Welcome to Nathishwar's Portfolio Terminal",
-  "Type 'help' to see available commands",
-  "Explore my projects, skills, and experiences",
-  "Use 'about' to learn more about me",
-  "Type 'projects' to view my work"
+const welcomeMessages = config.terminal.welcomeMessages;
+
+const ALL_COMMANDS = [
+  "about", "resume", "projects", "skills", "experience",
+  "achievements", "certificates", "contact", "clear", "help", "theme", "toggle"
 ];
 
 export const Terminal = forwardRef<TerminalHandle, TerminalProps>(({ currentSection }, ref) => {
@@ -43,17 +44,38 @@ export const Terminal = forwardRef<TerminalHandle, TerminalProps>(({ currentSect
   const [isResponseTyping, setIsResponseTyping] = useState(false);
   const terminalRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const { setTheme, availableThemes } = useTheme();
 
   // Expose handleCommand method to parent components
   useImperativeHandle(ref, () => ({
     handleCommand,
   }));
 
+  // Handle skip intro
+  useEffect(() => {
+    const handleSkip = (e: KeyboardEvent) => {
+      if (isTyping) {
+        // Skip all typing
+        setIsTyping(false);
+        setLines(welcomeMessages.map(msg => ({ type: "output", content: msg })));
+        setLines(prev => [...prev, { type: "output", content: "" }]);
+      }
+    };
+
+    if (isTyping) {
+      window.addEventListener("keydown", handleSkip);
+    }
+
+    return () => {
+      window.removeEventListener("keydown", handleSkip);
+    };
+  }, [isTyping]);
+
   // Typing animation effect for welcome messages
   useEffect(() => {
     if (isTyping && typingIndex < welcomeMessages.length) {
       const currentMessage = welcomeMessages[typingIndex];
-      
+
       if (typingCharIndex < currentMessage.length) {
         // Variable typing speed for more natural effect
         const randomSpeed = Math.random() * 30 + 15; // Between 15-45ms
@@ -75,7 +97,7 @@ export const Terminal = forwardRef<TerminalHandle, TerminalProps>(({ currentSect
           });
           setTypingCharIndex(prev => prev + 1);
         }, randomSpeed);
-        
+
         return () => clearTimeout(timer);
       } else {
         // Move to next message after a delay with random pause
@@ -84,7 +106,7 @@ export const Terminal = forwardRef<TerminalHandle, TerminalProps>(({ currentSect
           setTypingIndex(prev => prev + 1);
           setTypingCharIndex(0);
         }, randomPause);
-        
+
         return () => clearTimeout(timer);
       }
     } else if (isTyping && typingIndex >= welcomeMessages.length) {
@@ -99,7 +121,7 @@ export const Terminal = forwardRef<TerminalHandle, TerminalProps>(({ currentSect
   useEffect(() => {
     if (isResponseTyping && responseLineIndex < responseLines.length) {
       const currentLine = responseLines[responseLineIndex];
-      
+
       if (responseCharIndex < currentLine.content.length) {
         const timer = setTimeout(() => {
           setLines(prev => {
@@ -116,7 +138,7 @@ export const Terminal = forwardRef<TerminalHandle, TerminalProps>(({ currentSect
           });
           setResponseCharIndex(prev => prev + 1);
         }, 20); // Typing speed for responses
-        
+
         return () => clearTimeout(timer);
       } else {
         // Move to next line after a delay
@@ -128,7 +150,7 @@ export const Terminal = forwardRef<TerminalHandle, TerminalProps>(({ currentSect
           setResponseLineIndex(prev => prev + 1);
           setResponseCharIndex(0);
         }, 300);
-        
+
         return () => clearTimeout(timer);
       }
     } else if (isResponseTyping && responseLineIndex >= responseLines.length) {
@@ -164,14 +186,7 @@ export const Terminal = forwardRef<TerminalHandle, TerminalProps>(({ currentSect
   }, [currentSection]);
 
   const showLoadingAnimation = async (cmd: string) => {
-    const loadingMessages = [
-      "Initializing secure connection...",
-      "Decrypting portfolio data...",
-      "Loading project matrix...",
-      "Establishing quantum link...",
-      "Compiling information...",
-      "Access granted.",
-    ];
+    const loadingMessages = config.terminal.loadingMessages;
 
     setIsLoading(true);
 
@@ -187,7 +202,7 @@ export const Terminal = forwardRef<TerminalHandle, TerminalProps>(({ currentSect
     setLines((prev) => [...prev, { type: "output", content: `[${new Date().toLocaleTimeString()}] ✅ Loading complete` }]);
 
     setIsLoading(false);
-    
+
     // Execute the actual command after loading
     const output = executeCommand(cmd);
     // Start typing animation for the response
@@ -239,6 +254,8 @@ export const Terminal = forwardRef<TerminalHandle, TerminalProps>(({ currentSect
           { type: "output", content: "  achievements  - See my achievements and awards" },
           { type: "output", content: "  certificates  - View my certifications" },
           { type: "output", content: "  contact       - Get my contact information" },
+          { type: "output", content: "  theme         - Change color theme" },
+          { type: "output", content: "  toggle        - Show/Hide current window" },
           { type: "output", content: "  clear         - Clear the terminal" },
           { type: "output", content: "  help          - Show this help message" },
         ];
@@ -311,10 +328,42 @@ export const Terminal = forwardRef<TerminalHandle, TerminalProps>(({ currentSect
       case "clear":
         return [];
 
+      case "theme":
+        return [
+          {
+            type: "output",
+            content: `Available themes: ${availableThemes.join(", ")}\nUsage: theme <name>`,
+          },
+        ];
+
+      case "toggle":
+        if (isModalOpen) {
+          setIsModalOpen(false);
+          return [{ type: "output", content: "Window minimized. Type 'toggle' to restore." }];
+        } else if (currentModalSection) {
+          setIsModalOpen(true);
+          return [{ type: "output", content: "Restoring window..." }];
+        } else {
+          return [{ type: "error", content: "No window to toggle. Open a section first." }];
+        }
+
       case "":
         return [];
 
       default:
+        if (command.startsWith("theme ")) {
+          const themeName = command.split(" ")[1];
+          if (availableThemes.includes(themeName as any)) {
+            setTheme(themeName as any);
+            return [
+              { type: "output", content: `Theme switched to ${themeName}` },
+            ];
+          } else {
+            return [
+              { type: "error", content: `Theme '${themeName}' not found. Available themes: ${availableThemes.join(", ")}` },
+            ];
+          }
+        }
         return [
           {
             type: "error",
@@ -335,10 +384,10 @@ export const Terminal = forwardRef<TerminalHandle, TerminalProps>(({ currentSect
     ];
 
     setLines(newLines);
-    
+
     if (cmd.toLowerCase().trim() === "clear") {
-      setLines(isTyping ? 
-        welcomeMessages.map(() => ({ type: "output", content: "" })) : 
+      setLines(isTyping ?
+        welcomeMessages.map(() => ({ type: "output", content: "" })) :
         []);
       // Reset response typing state
       setIsResponseTyping(false);
@@ -379,6 +428,13 @@ export const Terminal = forwardRef<TerminalHandle, TerminalProps>(({ currentSect
         setHistoryIndex(newIndex);
         setInput(history[newIndex]);
       }
+    } else if (e.key === "Tab") {
+      e.preventDefault();
+      const lowerInput = input.toLowerCase();
+      const match = ALL_COMMANDS.find(cmd => cmd.startsWith(lowerInput));
+      if (match) {
+        setInput(match);
+      }
     }
   };
 
@@ -398,7 +454,7 @@ export const Terminal = forwardRef<TerminalHandle, TerminalProps>(({ currentSect
         {/* Terminal content */}
         <div
           ref={terminalRef}
-          className="flex-1 bg-[#0B0C10] text-[#D1D5DB] overflow-y-auto p-4 font-terminal text-sm"
+          className="flex-1 bg-[#0B0C10] text-[#D1D5DB] overflow-y-auto p-2 md:p-4 font-terminal text-xs md:text-sm"
           onClick={() => inputRef.current?.focus()}
         >
           {lines.map((line, index) => (
@@ -418,23 +474,29 @@ export const Terminal = forwardRef<TerminalHandle, TerminalProps>(({ currentSect
                 <span className="ml-1 animate-pulse">|</span>
               )}
               {/* Cursor for response typing */}
-              {isResponseTyping && index === lines.length - 1 && responseLineIndex < responseLines.length && 
-               responseLineIndex === index - (lines.length - responseLines.length) && 
-               responseCharIndex < line.content.length && (
-                <span className="ml-1 animate-pulse">|</span>
-              )}
+              {isResponseTyping && index === lines.length - 1 && responseLineIndex < responseLines.length &&
+                responseLineIndex === index - (lines.length - responseLines.length) &&
+                responseCharIndex < line.content.length && (
+                  <span className="ml-1 animate-pulse">|</span>
+                )}
             </div>
           ))}
 
           {/* Input line */}
           <form onSubmit={handleSubmit} className="flex items-center gap-2">
             <span className="text-terminal-prompt">$</span>
+            {isTyping && (
+              <div className="absolute bottom-4 right-4 text-xs text-muted-foreground animate-pulse hidden md:block">
+                Press any key to skip...
+              </div>
+            )}
             <input
               ref={inputRef}
               type="text"
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={handleKeyDown}
+              aria-label="Terminal Input"
               className="flex-1 bg-transparent text-terminal-foreground outline-none caret-terminal-cursor font-terminal"
               autoFocus
               spellCheck={false}

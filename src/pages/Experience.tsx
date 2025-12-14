@@ -19,7 +19,7 @@ interface Milestone {
 
 const MILESTONES: Milestone[] = [
   {
-    role: "Senior Full Stack & AI Engineer",
+    role: "AI Full Stack Developer Intern",
     company: "Tech Innovations Inc.",
     date: "Jan 2022 – Mar 2024",
     description:
@@ -30,12 +30,12 @@ const MILESTONES: Milestone[] = [
       "Cut deploy time 60% with CI/CD.",
     ],
     color: "cyan",
-    status: "current",
+    status: "completed",
     t: 0.08,
     rightSide: false,
   },
   {
-    role: "Frontend Developer",
+    role: "Frontend Developer Intern",
     company: "Digital Solutions LLC",
     date: "Mar 2020 – Dec 2021",
     description:
@@ -45,12 +45,12 @@ const MILESTONES: Milestone[] = [
       "Created a shared design system used by 8 teams.",
     ],
     color: "blue",
-    status: "resigned",
+    status: "completed",
     t: 0.32, // shifted position
     rightSide: true,
   },
   {
-    role: "Junior Web Developer",
+    role: "Junior Web Developer Intern",
     company: "StartUp Ventures",
     date: "Jun 2018 – Feb 2020",
     description:
@@ -60,12 +60,12 @@ const MILESTONES: Milestone[] = [
       "Improved SEO → +50% organic traffic.",
     ],
     color: "violet",
-    status: "resigned",
+    status: "completed",
     t: 0.48,
     rightSide: true,
   },
   {
-    role: "Python Developer",
+    role: "Python Developer Intern",
     company: "Ascender",
     date: "Apr 2024 – Present",
     description:
@@ -75,7 +75,7 @@ const MILESTONES: Milestone[] = [
       "Shipped internal CLI used by 10+ engineers.",
     ],
     color: "emerald",
-    status: "resigned",
+    status: "completed",
     t: 0.25,
     rightSide: true,
   },
@@ -279,7 +279,7 @@ export default function ExperienceTimelinePro() {
   };
 
   return (
-    <div className="h-full overflow-y-auto bg-[#0b0c10] text-white p-6 md:p-10 font-inter">
+    <div className="h-full overflow-y-auto bg-[#0b0c10] text-white p-3 md:p-10 font-inter">
       <div className="max-w-9xl mx-auto">
         <h1 className="text-4xl font-extrabold text-center">My Carrier Journey</h1>
         <p className="text-slate-400 text-center mb-8">My journey in the world of technology and my career milestones.</p>

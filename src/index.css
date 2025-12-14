@@ -43,21 +43,75 @@ All colors MUST be HSL.
     --dock-background: 220 13% 98%;
     --dock-hover: 211 100% 50%;
     --dock-active: 211 100% 45%;
-    
+
     --terminal-background: 220 20% 12%;
     --terminal-foreground: 120 100% 80%;
     --terminal-cursor: 120 100% 80%;
     --terminal-prompt: 211 100% 70%;
-    
+
     --window-close: 0 100% 65%;
     --window-minimize: 45 100% 55%;
     --window-maximize: 120 60% 50%;
-    
+
     --glass-bg: 220 13% 98%;
     --glass-border: 220 13% 90%;
-    
+
     /* Transitions */
     --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  /* Matrix Theme */
+  .theme-matrix {
+    --background: 120 100% 5%;
+    --foreground: 120 100% 50%;
+    --card: 120 100% 8%;
+    --card-foreground: 120 100% 60%;
+    --border: 120 100% 20%;
+    --dock-background: 120 100% 8%;
+    --dock-hover: 120 100% 40%;
+    --dock-active: 120 100% 50%;
+    --terminal-background: 0 0% 0%;
+    --terminal-foreground: 120 100% 50%;
+    --terminal-cursor: 120 100% 60%;
+    --terminal-prompt: 120 100% 40%;
+    --glass-bg: 120 100% 5%;
+    --glass-border: 120 100% 30%;
+  }
+
+  /* Cyberpunk Theme */
+  .theme-cyberpunk {
+    --background: 280 60% 10%;
+    --foreground: 180 100% 50%;
+    --card: 280 60% 15%;
+    --card-foreground: 300 100% 60%;
+    --border: 300 100% 40%;
+    --dock-background: 280 60% 15%;
+    --dock-hover: 300 100% 50%;
+    --dock-active: 180 100% 60%;
+    --terminal-background: 280 60% 8%;
+    --terminal-foreground: 300 100% 65%;
+    --terminal-cursor: 180 100% 50%;
+    --terminal-prompt: 60 100% 50%;
+    --glass-bg: 280 60% 10%;
+    --glass-border: 300 100% 50%;
+  }
+
+  /* Dracula Theme */
+  .theme-dracula {
+    --background: 231 15% 18%;
+    --foreground: 60 30% 96%;
+    --card: 231 15% 24%;
+    --card-foreground: 60 30% 96%;
+    --border: 231 15% 30%;
+    --dock-background: 231 15% 20%;
+    --dock-hover: 326 100% 74%;
+    --dock-active: 265 89% 78%;
+    --terminal-background: 231 15% 18%;
+    --terminal-foreground: 60 30% 96%;
+    --terminal-cursor: 326 100% 74%;
+    --terminal-prompt: 265 89% 78%;
+    --glass-bg: 231 15% 18%;
+    --glass-border: 265 89% 78%;
   }
 }
 
@@ -90,10 +144,99 @@ All colors MUST be HSL.
 }
 
 /* Hide scrollbar but keep scroll */
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: hsl(var(--terminal-background));
+}
+
+::-webkit-scrollbar-thumb {
+  background: hsl(var(--terminal-foreground) / 0.3);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--terminal-foreground) / 0.5);
+}
+
+/* Animations */
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+.animate-scale-in {
+  animation: scaleIn 0.2s ease-out forwards;
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.3s ease-out forwards;
+}
+
 .no-scrollbar::-webkit-scrollbar {
   display: none;
 }
+
 .no-scrollbar {
-  -ms-overflow-style: none; /* IE + Edge */
-  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none;
+  /* IE + Edge */
+  scrollbar-width: none;
+  /* Firefox */
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+  *,
+  ::before,
+  ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  /* Specifically disable typing animation or heavy effects if class-based */
+  .animate-pulse,
+  .animate-spin {
+    animation: none !important;
+  }
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+  display: block;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.1);
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.3);
 }

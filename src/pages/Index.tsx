@@ -28,9 +28,9 @@ const Index = () => {
     script.setAttribute("data-btn-position", "bottom-left");
     script.setAttribute("data-widget-btn-color", "#1F2D3D");
     script.id = "easy-peasy-bot-script";
-    
+
     document.body.appendChild(script);
-    
+
     return () => {
       // Clean up the script when the component unmounts
       const existingScript = document.getElementById("easy-peasy-bot-script");
@@ -46,7 +46,7 @@ const Index = () => {
 
   const handleSectionChange = (section: string) => {
     setActiveSection(section);
-    
+
     // Trigger command for non-home sections
     if (section !== "home") {
       // We'll use a timeout to ensure the terminal is ready
@@ -61,7 +61,7 @@ const Index = () => {
           achievements: "achievements",
           certificates: "certificates"
         };
-        
+
         const command = commandMap[section];
         if (command && terminalRef.current) {
           terminalRef.current.handleCommand(command);
@@ -90,22 +90,22 @@ const Index = () => {
         return <Certificates />;
       default:
         return (
-          <div className="flex bg-gradient-to-br from-[#0d1a2b] via-[#1f2d3d] to-[#c3d4e0] bg-background bg-black  h-full">
-            {/* Terminal Area - 75% width */}
-            <div className="w-[75%] p-8 h-full">
-              <Terminal 
+          <div className="flex flex-col lg:flex-row bg-gradient-to-br from-[#0d1a2b] via-[#1f2d3d] to-[#c3d4e0] bg-background bg-black h-full overflow-y-auto lg:overflow-hidden">
+            {/* Terminal Area - 75% width on desktop, 100% on mobile */}
+            <div className="w-full lg:w-[75%] p-4 lg:p-8 h-auto lg:h-full min-h-[500px]">
+              <Terminal
                 ref={terminalRef}
-                currentSection={activeSection} 
+                currentSection={activeSection}
               />
             </div>
 
-            {/* Profile Cards Area - 25% width */}
-            <div className="w-[25%] p-8 pl-0 flex  flex-col gap-4 h-full">
+            {/* Profile Cards Area - 25% width on desktop, 100% on mobile */}
+            <div className="w-full lg:w-[25%] p-4 lg:p-8 lg:pl-0 flex flex-col gap-4 h-auto lg:h-full">
               <div className="flex-[2] min-h-0">
                 <ProfileCard
                   name={portfolioData.about.name}
                   role={portfolioData.about.role}
-                  profileCardBio={portfolioData.about.bio}
+                  profileCard={portfolioData.about.bio}
                   bio={portfolioData.about.bio}
                   location={portfolioData.about.location}
                   github={portfolioData.contact.github}
@@ -126,15 +126,22 @@ const Index = () => {
   };
 
   return (
-    <div className="flex h-screen w-full bg-background bg-black overflow-hidden">
-      {/* Left Dock Sidebar */}
-      <div className="w-24 bg-gradient-to-b from-[#0d1a2b] via-[#1f2d3d] to-[#3c4b57] border-r border-border/50">
+    <div className="flex flex-col md:flex-row h-screen w-full bg-background bg-black overflow-hidden">
+      {/* Dock Sidebar - Hidden on mobile, or bottom? For now, sidebar on tablet+ */}
+      <div className="hidden md:block w-20 lg:w-24 bg-gradient-to-b from-[#0d1a2b] via-[#1f2d3d] to-[#3c4b57] border-r border-border/50 shrink-0 relative z-50">
         <Dock activeSection={activeSection} onSectionChange={handleSectionChange} />
       </div>
 
       {/* Main Content Area */}
-      <div className="flex-1 overflow-hidden">
+      <div className="flex-1 overflow-hidden relative">
         {renderActiveSection()}
+
+        {/* Mobile Dock (Bottom Bar) */}
+        <div className="md:hidden absolute bottom-4 left-0 right-0 flex justify-center z-50 pointer-events-none">
+          <div className="bg-black/20 backdrop-blur-md rounded-2xl pointer-events-auto">
+            <Dock activeSection={activeSection} onSectionChange={handleSectionChange} isMobile={true} />
+          </div>
+        </div>
       </div>
     </div>
   );

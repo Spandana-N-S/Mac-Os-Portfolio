@@ -1,292 +1,228 @@
 import { portfolioData } from "@/lib/portfolioData";
-import React from 'react'; // Import React for JSX
+import { Terminal, Cpu, Code2, Globe, Sparkles, GraduationCap, Mail, Github, Linkedin, Instagram } from "lucide-react";
+import React, { useState, useEffect } from 'react';
 
-// Define a <style> tag to inject global keyframes and classes for animation
-const animationStyles = `
-  @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
+const TypewriterText = ({ text, delay = 0 }: { text: string, delay?: number }) => {
+  const [displayedText, setDisplayedText] = useState('');
 
-  @keyframes pulseShadow {
-    0% { box-shadow: 0 0 20px #4DA8FF40; }
-    50% { box-shadow: 0 0 35px #4DA8FF80; }
-    100% { box-shadow: 0 0 20px #4DA8FF40; }
-  }
+  useEffect(() => {
+    setDisplayedText(''); // Reset
+    const timeout = setTimeout(() => {
+      let charIndex = 0;
+      const interval = setInterval(() => {
+        if (charIndex <= text.length) {
+          setDisplayedText(text.slice(0, charIndex));
+          charIndex++;
+        } else {
+          clearInterval(interval);
+        }
+      }, 30);
+      return () => clearInterval(interval);
+    }, delay);
+    return () => clearTimeout(timeout);
+  }, [text, delay]);
 
-  /* We can use this class to apply the animation */
-  .fade-in {
-    animation: fadeIn 0.6s ease-out forwards;
-  }
-  
-  /* Staggered delay classes */
-  .fade-in-delay-1 { animation-delay: 0.1s; }
-  .fade-in-delay-2 { animation-delay: 0.2s; }
-  .fade-in-delay-3 { animation-delay: 0.3s; }
-  .fade-in-delay-4 { animation-delay: 0.4s; }
-  .fade-in-delay-5 { animation-delay: 0.5s; }
-`;
-
-// A helper component to render highlighted text
-const Highlight = ({ children }: { children: React.ReactNode }) => (
-  <span className="
-    font-medium 
-    bg-clip-text text-transparent 
-    bg-gradient-to-r from-[#4DA8FF] to-[#A78BFA]
-  ">
-    {children}
-  </span>
-);
+  return <span className="font-mono min-h-[1.5em] block sm:inline">{displayedText}<span className="animate-pulse text-cyan-400">_</span></span>;
+};
 
 export const About = () => {
   return (
-    <>
-      {/* Inject the animation styles into the component */}
-      <style>{animationStyles}</style>
+    <div className="h-full overflow-y-auto overflow-x-hidden bg-[#050507] text-slate-300 font-inter">
 
-      <div className="
-        h-full overflow-y-auto p-4 sm:p-8 
-        bg-gradient-to-br from-black via-gray-700 to-[#3C4B57]
-        text-[#E7ECF4]
-      ">
-        <div className="max-w-7xl mx-auto">
+      {/* Background Matrix Effect (Subtle) */}
+      <div className="fixed inset-0 pointer-events-none opacity-20 bg-[radial-gradient(circle_at_50%_50%,rgba(14,165,233,0.1),transparent_70%)]" />
 
-          {/* Outer Card */}
-          <div className="
-            rounded-2xl shadow-4xl overflow-hidden
-             bg-gradient-to-br from-black via-[#1F2D3D] to-[#3C4B57]  border border-white/10 backdrop-blur-xl rounded-2xl shadow-xl shadow-black/40
-            border border-white/10 backdrop-blur-xl
-            fade-in
-          ">
-            
-            {/* Header */}
-            <div className="
-              bg-gradient-to-br from-[#4DA8FF]/10 to-[#A78BFA]/10 
-              p-8 text-center border-b border-white/10
-            ">
-              <img 
-                src="/Perfect_dp_1.jpg"
-                alt={portfolioData.about.name}
-                className="
-                  w-50 h-32 rounded-full mx-auto mb-6 
-                  shadow-black/20 shadow-[0_0_20px_#4DA8FF40] 
-                  border-4 border-[#4DA8FF]/40 
-                  object-cover
-                "
-                style={{ animation: 'pulseShadow 3s infinite ease-in-out' }}
-                onError={(e) => {
-                  (e.target as HTMLImageElement).src = 'https://placehold.co/128x128/1F2D3D/E7ECF4?text=NC';
-                }}
-              />
-              <h1 className="text-4xl font-bold text-[#E7ECF4] fade-in">
-                {portfolioData.about.name}
-              </h1>
-              <p className="text-[#4DA8FF] text-2xl mt-2 font-medium fade-in fade-in-delay-1">
-                {portfolioData.about.role}
-              </p>
-              <p className="text-[#A3B1C4] mt-2 fade-in fade-in-delay-2">
-                {portfolioData.about.location}
+      <div className="max-w-6xl mx-auto p-6 md:p-12 relative z-10">
+
+        {/* ---------------------------------------------------------------------------
+           HEADER SECTION: Identity & Bio
+           --------------------------------------------------------------------------- */}
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-12 mb-20 items-center">
+
+          {/* Profile Picture with Scanner Effect */}
+          <div className="md:col-span-4 flex justify-center">
+            <div className="relative group">
+              {/* Spinning Rings */}
+              <div className="absolute inset-0 rounded-full border border-cyan-500/30 border-t-transparent animate-spin duration-[3s]" />
+              <div className="absolute -inset-2 rounded-full border border-purple-500/20 border-b-transparent animate-spin duration-[5s] reverse" />
+
+              {/* Image Container */}
+              <div className="w-72 h-72 md:w-96 md:h-96 rounded-full overflow-hidden border-4 border-black/50 relative z-10">
+                <img
+                  src="/Perfect_dp_1.jpg"
+                  alt={portfolioData.about.name}
+                  className="w-full h-full object-cover object-top filter grayscale group-hover:grayscale-0 transition-all duration-500"
+                  onError={(e) => {
+                    (e.target as HTMLImageElement).src = 'https://placehold.co/200x200/1F2D3D/E7ECF4?text=NC';
+                  }}
+                />
+                {/* Scanner Line Overlay */}
+                <div className="absolute inset-0 bg-gradient-to-b from-transparent via-cyan-500/20 to-transparent h-1/4 w-full animate-scan pointer-events-none" />
+              </div>
+
+              {/* Status Badge */}
+              <div className="absolute bottom-2 right-2 bg-black/80 backdrop-blur border border-green-500/50 text-green-400 text-xs px-3 py-1 rounded-full flex items-center gap-2 shadow-lg z-20">
+                <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
+                ONLINE
+              </div>
+            </div>
+          </div>
+
+          {/* Bio Text */}
+          <div className="md:col-span-8 space-y-6">
+            <div className="flex items-center gap-3 text-cyan-500 font-mono text-sm tracking-widest bg-cyan-950/30 w-fit px-3 py-1 rounded border border-cyan-800">
+              <Terminal className="w-4 h-4" />
+              SYSTEM_BIO_INIT
+            </div>
+
+            <h1 className="text-5xl font-black text-white tracking-tight">
+              {portfolioData.about.name}
+            </h1>
+
+            <div className="h-32 md:h-24"> {/* Min height to prevent layout shift */}
+              <p className="text-xl md:text-2xl text-slate-400 font-light leading-relaxed">
+                <TypewriterText text={portfolioData.about.bio.split(".")[0] + "."} delay={500} />
               </p>
             </div>
-            
-            {/* Content */}
-            <div className="p-4 sm:p-8">
 
-              {/* About Me */}
-              <div className="mb-10 fade-in fade-in-delay-3">
-                <h2 className="text-3xl font-bold mb-4 text-[#E7ECF4] border-b border-white/10 pb-2">About Me</h2>
-                <p className="text-[#A3B1C4] text-lg leading-relaxed">
-                  <Highlight>Passionate developer</Highlight> with <Highlight>expertise</Highlight> in building <Highlight>modern web applications</Highlight>. 
-                  I love creating <Highlight>elegant solutions</Highlight> to <Highlight>complex problems</Highlight>.
-                </p>
+            <div className="flex flex-wrap gap-4 pt-4">
+              {/* Quick Stats/Tags */}
+              <div className="flex items-center gap-2 px-4 py-2 bg-white/5 rounded-lg border border-white/10 hover:border-cyan-500/50 transition-colors cursor-default">
+                <Cpu className="w-4 h-4 text-cyan-400" />
+                <span className="text-sm">AI Engineer</span>
               </div>
+              <div className="flex items-center gap-2 px-4 py-2 bg-white/5 rounded-lg border border-white/10 hover:border-purple-500/50 transition-colors cursor-default">
+                <Code2 className="w-4 h-4 text-purple-400" />
+                <span className="text-sm">Full Stack</span>
+              </div>
+              <div className="flex items-center gap-2 px-4 py-2 bg-white/5 rounded-lg border border-white/10 hover:border-green-500/50 transition-colors cursor-default">
+                <Globe className="w-4 h-4 text-green-400" />
+                <span className="text-sm">Open Source Contributor</span>
+              </div>
+            </div>
+          </div>
+        </div>
 
-              {/* Achievements */}
-              <div className="mb-10 fade-in fade-in-delay-4">
-                <h2 className="text-3xl font-bold mb-6 text-[#E7ECF4] border-b border-white/10 pb-2">Achievements</h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {/* ---------------------------------------------------------------------------
+           TECH TICKER: Infinite Scroll
+           --------------------------------------------------------------------------- */}
+        <div className="w-full overflow-hidden bg-white/5 border-y border-white/5 py-4 mb-20 relative">
+          <div className="absolute inset-y-0 left-0 w-20 bg-gradient-to-r from-[#050507] to-transparent z-10" />
+          <div className="absolute inset-y-0 right-0 w-20 bg-gradient-to-l from-[#050507] to-transparent z-10" />
 
-                  {/* Achievement Cards - now with hover:scale and transition */}
-                  <div className="p-6 rounded-xl border border-white/10
-                    bg-gradient-to-br from-[#102132]/60 via-[#1F2D3D]/50 to-[#3C4B57]/40
-                    shadow-lg backdrop-blur-xl hover:shadow-[0_0_25px_#4DA8FF60]
-                    transition-all duration-300 hover:scale-[1.03]">
-                    <h3 className="text-xl font-bold text-[#4DA8FF] mb-2">Library Author</h3>
-                    <p className="text-[#A3B1C4]">
-                      Creator of <b>PywhatKit_alt</b> and <b>Quick Invoice</b> Python modules used by developers worldwide.
-                    </p>
-                  </div>
+          <div className="flex w-[200%] animate-ticker hover:pause-animation">
+            {[...Object.values(portfolioData.skills).flat(), ...Object.values(portfolioData.skills).flat()].map((skill, i) => (
+              <span key={i} className="mx-8 text-slate-500 font-mono text-sm whitespace-nowrap hover:text-cyan-400 transition-colors cursor-crosshair">
+                {skill}
+              </span>
+            ))}
+          </div>
+        </div>
 
-                  <div className="p-6 rounded-xl border border-white/10
-                    bg-gradient-to-br from-[#102132]/60 via-[#1F2D3D]/50 to-[#3C4B57]/40
-                    shadow-lg backdrop-blur-xl hover:shadow-[0_0_25px_#A78BFA60]
-                    transition-all duration-300 hover:scale-[1.03]">
-                    <h3 className="text-xl font-bold text-[#A78BFA] mb-2">Founder & CEO</h3>
-                    <p className="text-[#A3B1C4]">
-                      Founder of <b>KnowGrow</b> — building AI-powered learning tools and automation systems.
-                    </p>
-                  </div>
 
-                  <div className="p-6 rounded-xl border border-white/10
-                    bg-gradient-to-br from-[#102132]/60 via-[#1F2D3D]/50 to-[#3C4B57]/40
-                    shadow-lg backdrop-blur-xl hover:shadow-[0_0_25px_#4DA8FF60]
-                    transition-all duration-300 hover:scale-[1.03]">
-                    <h3 className="text-xl font-bold text-[#4DA8FF] mb-2">AI Software Creator</h3>
-                    <p className="text-[#A3B1C4]">
-                      Built <b>Ruixen AI</b> — an intelligent AI software ecosystem designed for modular automation and productivity.
-                    </p>
-                  </div>
+        {/* ---------------------------------------------------------------------------
+           TIMELINE: Education
+           --------------------------------------------------------------------------- */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 mb-20">
 
-                  <div className="p-6 rounded-xl border border-white/10
-                    bg-gradient-to-br from-[#102132]/60 via-[#1F2D3D]/50 to-[#3C4B57]/40
-                    shadow-lg backdrop-blur-xl hover:shadow-[0_0_25px_#A78BFA60]
-                    transition-all duration-300 hover:scale-[1.03]">
-                    <h3 className="text-xl font-bold text-[#A78BFA] mb-2">Open Source Contributor</h3>
-                    <p className="text-[#A3B1C4]">
-                      Contributed to <b>10+ AI</b> and full-stack open-source projects including Gen-AI and automation tools.
-                    </p>
-                  </div>
+          {/* Timeline Column */}
+          <div>
+            <h2 className="text-2xl font-bold text-white mb-8 flex items-center gap-3">
+              <GraduationCap className="w-6 h-6 text-purple-400" />
+              Academic Timeline
+            </h2>
 
-                  <div className="p-6 rounded-xl border border-white/10
-                    bg-gradient-to-br from-[#102132]/60 via-[#1F2D3D]/50 to-[#3C4B57]/40
-                    shadow-lg backdrop-blur-xl hover:shadow-[0_0_25px_#4DA8FF60]
-                    transition-all duration-300 hover:scale-[1.03]">
-                    <h3 className="text-xl font-bold text-[#4DA8FF] mb-2">CodeX Creator</h3>
-                    <p className="text-[#A3B1C4]">
-                      Developed <b>Codex</b> — a real-time coding platform with live preview, cursor sharing, and video chat.
-                    </p>
-                  </div>
-
-                  <div className="p-6 rounded-xl border border-white/10
-                    bg-gradient-to-br from-[#102132]/60 via-[#1F2D3D]/50 to-[#3C4B57]/40
-                    shadow-lg backdrop-blur-xl hover:shadow-[0_0_25px_#A78BFA60]
-                    transition-all duration-300 hover:scale-[1.03]">
-                    <h3 className="text-xl font-bold text-[#A78BFA] mb-2">Tech Explorer</h3>
-                    <p className="text-[#A3B1C4]">
-                      Uses <b>50+ vibe-code tools</b> & <b>100+ AI tools</b> for productivity, creativity, and research.
-                    </p>
+            <div className="relative pl-8 border-l border-white/10 space-y-12">
+              {/* Current degree */}
+              <div className="relative group">
+                <div className="absolute -left-[37px] w-4 h-4 rounded-full bg-purple-500 border-4 border-[#050507] group-hover:scale-125 transition-transform" />
+                <div className="bg-[#0D1A2B] p-6 rounded-xl border border-white/10 relative hover:-translate-y-1 transition-transform hover:shadow-[0_0_20px_rgba(168,85,247,0.15)]">
+                  <div className="absolute -left-2 top-6 w-2 h-2 bg-[#0D1A2B] rotate-45 border-l border-b border-white/10" />
+                  <div className="text-xs text-purple-400 font-mono mb-1">2023 - Present</div>
+                  <h3 className="text-lg font-bold text-white mb-1">B.Tech AI & Data Science</h3>
+                  <p className="text-slate-400 text-sm">Dhanalakshmi Srinivasan Engineering College</p>
+                  <div className="mt-3 px-3 py-1 bg-purple-500/10 text-purple-300 rounded text-xs w-fit">
+                    CGPA: 9.0 (Current)
                   </div>
                 </div>
               </div>
-              
-              {/* Education */}
-              <div className="mb-10 fade-in fade-in-delay-5">
-                <h2 className="text-3xl font-bold mb-4 text-[#E7ECF4] border-b border-white/10 pb-2">Education</h2>
-                
-                <div className="
-                  rounded-xl p-6 
-                  bg-gradient-to-br from-[#0D1A2B]/50 via-[#1F2D3D]/40 to-[#3C4B57]/40
-                  border border-white/10 backdrop-blur-lg
-                  shadow-lg transition-all duration-300 hover:shadow-xl
-                ">
-                  <h3 className="text-xl font-bold text-[#E7ECF4]">
-                    {portfolioData.about.education}
-                  </h3>
-                  <p className="text-[#A3B1C4] mt-1">Dhanalakshmi Srinivasan Engineering college</p>
-                  <p className="text-sm text-[#A3B1C4] mt-2">Graduate at 2027</p>
+
+              {/* Previous */}
+              <div className="relative group opacity-70 hover:opacity-100 transition-opacity">
+                <div className="absolute -left-[37px] w-4 h-4 rounded-full bg-slate-600 border-4 border-[#050507]" />
+                <div className="bg-[#121214] p-6 rounded-xl border border-white/5 relative">
+                  <div className="text-xs text-slate-500 font-mono mb-1">2021 - 2023</div>
+                  <h3 className="text-lg font-bold text-slate-200 mb-1">Bio Mathematics</h3>
+                  <p className="text-slate-500 text-sm">Marutham Matric Hr. Sec. School</p>
+                  <div className="mt-3 px-3 py-1 bg-slate-800 text-slate-400 rounded text-xs w-fit">
+                    Grade: 89.8%
+                  </div>
                 </div>
               </div>
-              
-              {/* Skills + Contact */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            </div>
+          </div>
 
-                {/* Skills Section */}
-                <div className="fade-in fade-in-delay-5">
-                  <h2 className="text-3xl font-bold mb-4 text-[#E7ECF4] border-b border-white/10 pb-2">Skills</h2>
-                  
-                  <div className="space-y-4">
-                    {Object.entries(portfolioData.skills).map(([category, skills]) => (
-                      <div 
-                        key={category}
-                        className="
-                          rounded-xl p-4 
-                          bg-gradient-to-br from-[#0D1A2B]/40 via-[#1F2D3D]/30 to-[#3C4B57]/30
-                          border border-white/10 backdrop-blur-lg
-                          shadow-lg
-                        "
-                      >
-                        <h3 className="font-bold capitalize mb-3 text-xl text-[#E7ECF4]">
-                          {category}
-                        </h3>
+          {/* Interests / "Download" Grid */}
+          <div className="relative">
+            <h2 className="text-2xl font-bold text-white mb-8 flex items-center gap-3">
+              <Sparkles className="w-6 h-6 text-yellow-400" />
+              Core Interests
+            </h2>
 
-                        <div className="flex flex-wrap gap-2">
-                          {(skills as string[]).map((skill: string, index: number) => (
-                            <span 
-                              key={index}
-                              className="
-                                px-3 py-1 rounded-full text-sm
-                                bg-[#4DA8FF]/10 text-[#4DA8FF]
-                                border border-[#4DA8FF]/20
-                                transition-all duration-200
-                                hover:bg-[#4DA8FF]/20 hover:scale-110 cursor-default
-                              "
-                            >
-                              {skill}
-                            </span>
-                          ))}
-                        </div>
-                      </div>
-                    ))}
-                  </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {[
+                { label: "AI & ML", desc: "Building intelligent agents", color: "bg-cyan-500" },
+                { label: "Web Development", desc: "Building websites", color: "bg-blue-500" },
+                { label: "Vibe Coding", desc: "Flow state programming", color: "bg-purple-500" },
+                { label: "Open Source", desc: "Community contributions", color: "bg-green-500" },
+                { label: "Futurism", desc: "Next-gen tech research", color: "bg-pink-500" }
+              ].map((item, idx) => (
+                <div key={idx} className="p-4 rounded-xl bg-white/5 border border-white/5 hover:bg-white/[0.08] transition-colors group">
+                  <div className={`w-8 h-1 mb-3 rounded-full ${item.color} group-hover:w-16 transition-[width] duration-300`} />
+                  <h3 className="font-bold text-slate-200">{item.label}</h3>
+                  <p className="text-xs text-slate-500 mt-1">{item.desc}</p>
                 </div>
-                
-                {/* Contact Section */}
-                <div className="fade-in fade-in-delay-5">
-                  <h2 className="text-3xl font-bold mb-4 text-[#E7ECF4] border-b border-white/10 pb-2">Contact</h2>
+              ))}
+            </div>
 
-                  <div className="
-                    rounded-xl p-6 space-y-4
-                    bg-gradient-to-br from-[#0D1A2B]/40 via-[#1F2D3D]/30 to-[#3C4B57]/30
-                    border border-white/10 backdrop-blur-lg
-                    shadow-lg
-                  ">
-                    <div className="flex items-center">
-                      <span className="font-medium w-24 text-[#E7ECF4]">Email:</span>
-                      <a href={`mailto:${portfolioData.contact.email}`} className="text-[#A3B1C4] hover:text-[#4DA8FF] transition-colors">{portfolioData.contact.email}</a>
-                    </div>
-                    <div className="flex items-center">
-                      <span className="font-medium w-24 text-[#E7ECF4]">GitHub:</span>
-                      <a href={`https://${portfolioData.contact.github}`} target="_blank" rel="noopener noreferrer" className="text-[#A3B1C4] hover:text-[#4DA8FF] transition-colors">{portfolioData.contact.github}</a>
-                    </div>
-                    <div className="flex items-center">
-                      <span className="font-medium w-24 text-[#E7ECF4]">LinkedIn:</span>
-                      <a href={`https://{portfolioData.contact.linkedin}`} target="_blank" rel="noopener noreferrer" className="text-[#A3B1C4] hover:text-[#4DA8FF] transition-colors">{portfolioData.contact.linkedin}</a>
-                    </div>
-                    <div className="flex items-center">
-                      <span className="font-medium w-24 text-[#E7ECF4]">Twitter:</span>
-                      <a href={`https{portfolioData.contact.twitter}`} target="_blank" rel="noopener noreferrer" className="text-[#A3B1C4] hover:text-[#4DA8FF] transition-colors">{portfolioData.contact.twitter}</a>
-                    </div>
-                    <div className="flex items-center">
-                      <span className="font-medium w-24 text-[#E7ECF4]">Website:</span>
-                      <a href={`https://${portfolioData.contact.website}`} target="_blank" rel="noopener noreferrer" className="text-[#A3B1C4] hover:text-[#4DA8FF] transition-colors">{portfolioData.contact.website}</a>
-                    </div>
-                  </div>
-                  
-                  {/* Interests */}
-                  <h2 className="text-3xl font-bold mt-8 mb-4 text-[#E7ECF4] border-b border-white/10 pb-2">
-                    Interests
-                  </h2>
-
-                  <div className="
-                    rounded-xl p-6 
-                    bg-gradient-to-br from-[#0D1A2B]/40 via-[#1F2D3D]/30 to-[#3C4B57]/30
-                    border border-white/10 backdrop-blur-lg
-                    shadow-lg
-                  ">
-                    <p className="text-[#A3B1C4] text-lg leading-relaxed">
-                      When I'm not coding, I enjoy <Highlight>contributing to open source</Highlight>, 
-                      writing technical blogs, and <Highlight>exploring new technologies</Highlight>. 
-                      I'm passionate about <Highlight>AI/ML</Highlight> and <Highlight>cloud computing</Highlight> and also <Highlight>vibecoding</Highlight> and <Highlight>experimenting with new AI tools</Highlight>. Tech, creativity, and <Highlight>futuristic ideas</Highlight> keep me energized and always building something new.
-                    </p>
-                  </div>
-                </div>
-
+            {/* Contact Mini-Card */}
+            <div className="mt-8 p-6 rounded-xl bg-gradient-to-r from-cyan-900/20 to-purple-900/20 border border-white/10">
+              <h3 className="text-white font-bold mb-4 flex items-center gap-2">
+                <Mail className="w-4 h-4" /> Connect Protocol
+              </h3>
+              <div className="flex gap-4">
+                <a href={`https://${portfolioData.contact.github}`} className="p-2 rounded-lg bg-black/40 hover:text-white text-slate-400 hover:bg-black/60 transition-all"><Github className="w-5 h-5" /></a>
+                <a href={`https://${portfolioData.contact.linkedin}`} className="p-2 rounded-lg bg-black/40 hover:text-blue-400 text-slate-400 hover:bg-black/60 transition-all"><Linkedin className="w-5 h-5" /></a>
+                <a href={`https://${portfolioData.contact.instagram}`} className="p-2 rounded-lg bg-black/40 hover:text-pink-400 text-slate-400 hover:bg-black/60 transition-all"><Instagram className="w-5 h-5" /></a>
               </div>
             </div>
           </div>
 
         </div>
+
+        {/* Global Keyframes within component (styled-jsx equivalent) */}
+        <style>{`
+           @keyframes scan {
+              0% { top: 0%; opacity: 0; }
+              50% { opacity: 1; }
+              100% { top: 100%; opacity: 0; }
+           }
+           .animate-scan {
+              animation: scan 3s linear infinite;
+           }
+           @keyframes ticker {
+              0% { transform: translateX(0); }
+              100% { transform: translateX(-50%); }
+           }
+           .animate-ticker {
+              animation: ticker 40s linear infinite;
+           }
+           /* Pause animation on hover */
+           .hover\:pause-animation:hover {
+              animation-play-state: paused;
+           }
+        `}</style>
       </div>
-    </>
+    </div>
   );
 };
