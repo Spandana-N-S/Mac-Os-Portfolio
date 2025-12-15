@@ -325,28 +325,28 @@ export function subscribeToTasks(userId: string, callback: (tasks: Task[]) => vo
       issuer: "Google",
       date: "2024",
       credentialId: "e291ca949fcfa3f415fccf9008e78266.",
-      link: "https://drive.google.com/file/d/1MLIs740REVglsrPR6w55NpTHzb1U60jc/view?usp=drive_link"
+      link: "https://drive.google.com/file/d/1MLIs740REVglsrPR6w55NpTHzb1y60jc/view?usp=sharing"
     },
     {
       name: "Problem Solving",
       issuer: "Hackerrank",
       date: "2024",
       credentialId: "FE35A5B19540",
-      link: "https://drive.google.com/file/d/1yAo4pjXy919k2JgVuGl17t557EF8_tcC/view?usp=drive_link"
+      link: "https://drive.google.com/file/d/1yAo4pjXy919k2JgVuGl17t557EF8_tcC/view?usp=sharing"
     },
     {
       name: "Learnathon 2024",
       issuer: "ICT Academy",
       date: "2024",
       credentialId: "ICT-345678",
-      link: "https://drive.google.com/file/d/1_dafaqNtyGAcrnIrVn-QHxP1UYnzwMv_/view?usp=drive_link"
+      link: "https://drive.google.com/file/d/1_dafaqNtyGAcrnIrVn-QHxP1UYnzwMv_/view?usp=sharing"
     },
     {
       name: "AI Engineer Internship",
       issuer: "NoviTech private limited",
       date: "2024",
       credentialId: "AIIN2547",
-      link: "https://drive.google.com/file/d/16XrgsZyLNlkYf8NN_oVLD0l9XFcfLa71/view?usp=drive_link"
+      link: "https://drive.google.com/file/d/16XrgsZyLNlkYf8NN_oVLD0l9XFcfLa71/view?usp=sharing"
     },
     {
       name: "Data Analyst Internship",
@@ -360,7 +360,7 @@ export function subscribeToTasks(userId: string, callback: (tasks: Task[]) => vo
       issuer: "SkillCraft Technology Pvt Ltd",
       date: "2025",
       credentialId: "SCT/FEB25/0771",
-      link: "https://drive.google.com/file/d/1NE7vBZKr4PJkCJLLCOWbSV99J1btOtjg/view?usp=drive_link"
+      link: "https://drive.google.com/file/d/1NE7vBZKr4PJkCJLLCOWbSV99J1btOtjg/view?usp=sharing"
     }
   ],
 

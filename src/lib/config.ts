@@ -6,6 +6,7 @@ export const config = {
             "Type 'help' to see available commands",
             "Explore my projects, skills, and experiences",
             "Use 'about' to learn more about me",
+            "You can change the theme using 'theme' command",
             "Type 'projects' to view my work"
         ],
         loadingMessages: [

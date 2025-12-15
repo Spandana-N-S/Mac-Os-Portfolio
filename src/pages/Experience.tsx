@@ -67,7 +67,7 @@ const MILESTONES: Milestone[] = [
   {
     role: "Python Developer Intern",
     company: "Ascender",
-    date: "Apr 2024 – Present",
+    date: "Apr 2024 – Jun 2024",
     description:
       "APIs, automation & data tooling with Python; delivery speed focus.",
     achievements: [

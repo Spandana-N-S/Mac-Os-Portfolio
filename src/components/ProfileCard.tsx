@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { Github, Globe, Linkedin, Twitter, Instagram, Mail } from "lucide-react";
-import { GitHubActivity } from "./GitHubActivity";
+import { GitHubActivityRedesigned } from "./GitHubActivityRedesigned";
 import { portfolioData } from "@/lib/portfolioData";
+import { cn } from "@/lib/utils";
 
 interface ProfileCardProps {
   name: string;
@@ -40,9 +41,12 @@ export const ProfileCard = ({
 
   return (
     <>
-      <div className="h-full flex flex-col bg-gradient-to-br from-[#0D1A2B] via-[#1F2D3D] to-[#3C4B57] border border-white/10 backdrop-blur-xl rounded-2xl shadow-xl shadow-black/40 overflow-hidden hover:shadow-2xl hover:shadow-cyan-500/20 transition-all duration-300">
-        <div className="bg-gradient-to-br from-primary/10 to-secondary/10 p-6">
-          <div className="flex flex-col items-center text-center">
+      <div className="h-full flex flex-col bg-gradient-to-br from-[#0D1A2B] via-[#1F2D3D] to-[#3C4B57] border border-white/10 backdrop-blur-xl rounded-2xl shadow-xl shadow-black/40 overflow-hidden hover:shadow-2xl hover:shadow-cyan-500/20 transition-all duration-300 group">
+        <div className="bg-gradient-to-br from-primary/10 to-secondary/10 p-6 relative overflow-hidden">
+          {/* Decorative sheen */}
+          <div className="absolute top-0 -left-full w-full h-full bg-gradient-to-r from-transparent via-white/5 to-transparent rotate-45 group-hover:translate-x-[200%] transition-transform duration-1000 ease-in-out pointer-events-none"></div>
+
+          <div className="flex flex-col items-center text-center relative z-10">
             {/* Profile Image */}
             <div className="w-24 h-24 rounded-full bg-gradient-to-br from-cyan-500 to-blue-600 flex items-center justify-center mb-4 border-4 border-white shadow-lg hover:scale-105 transition-transform duration-300">
               <span className="text-3xl font-bold text-white">
@@ -124,9 +128,9 @@ export const ProfileCard = ({
           <div className="flex flex-col sm:flex-row gap-3">
             <button
               onClick={() => setShowGitHubActivity(true)}
-              className="flex-1 py-3 px-5 rounded-xl bg-gradient-to-br from-[#0D1A2B] via-[#1F2D3D] to-[#3C4B57] border border-white/10 backdrop-blur-xl text-[#E7ECF4] hover:from-cyan-600/30 hover:to-blue-600/30 hover:border-cyan-500/50 transition-all duration-300 flex items-center justify-center"
+              className="flex-1 py-2 px-5 rounded-xl bg-gradient-to-br from-[#0D1A2B] via-[#1F2D3D] to-[#3C4B57] border border-white/10 backdrop-blur-xl text-[#E7ECF4] hover:from-cyan-600/30 hover:to-blue-600/30 hover:border-cyan-500/50 transition-all duration-300 flex items-center justify-center group"
             >
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2 group-hover:scale-110 transition-transform" viewBox="0 0 20 20" fill="currentColor">
                 <path fillRule="evenodd" d="M12.316 3.051a1 1 0 01.633 1.265l-4 12a1 1 0 11-1.898-.632l4-12a1 1 0 011.265-.633zM5.707 6.293a1 1 0 010 1.414L3.414 10l2.293 2.293a1 1 0 11-1.414 1.414l-3-3a1 1 0 010-1.414l3-3a1 1 0 011.414 0zm8.586 0a1 1 0 011.414 0l3 3a1 1 0 010 1.414l-3 3a1 1 0 11-1.414-1.414L16.586 10l-2.293-2.293a1 1 0 010-1.414z" clipRule="evenodd" />
               </svg>
               Recent Works
@@ -134,9 +138,9 @@ export const ProfileCard = ({
 
             <button
               onClick={() => window.location.href = `mailto:${email}`}
-              className="flex-1 py-3 px-5 rounded-xl bg-gradient-to-br from-cyan-600/30 to-blue-600/30 border border-cyan-500/50 backdrop-blur-xl text-[#E7ECF4] hover:from-cyan-600/50 hover:to-blue-600/50 hover:border-cyan-400 transition-all duration-300 flex items-center justify-center"
+              className="flex-1 py-3 px-5 rounded-xl bg-gradient-to-br from-cyan-600/30 to-blue-600/30 border border-cyan-500/50 backdrop-blur-xl text-[#E7ECF4] hover:from-cyan-600/50 hover:to-blue-600/50 hover:border-cyan-400 transition-all duration-300 flex items-center justify-center group"
             >
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2 group-hover:scale-110 transition-transform" viewBox="0 0 20 20" fill="currentColor">
                 <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
                 <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
               </svg>
@@ -148,7 +152,7 @@ export const ProfileCard = ({
 
       {/* GitHub Activity Modal */}
       {showGitHubActivity && (
-        <GitHubActivity
+        <GitHubActivityRedesigned
           username={githubUsername}
           onClose={() => setShowGitHubActivity(false)}
         />

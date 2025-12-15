@@ -1,4 +1,5 @@
 
+
 import { Calendar, ExternalLink, GitCommit, BookOpen, Eye, GitFork, Code } from "lucide-react";
 import { ReactNode } from "react";
 
@@ -67,33 +68,37 @@ export const GitHubRecentActivity = ({ events }: GitHubRecentActivityProps) => {
 
     return (
         <div className="space-y-6">
-            <h3 className="font-bold text-xl text-white">Recent Activity</h3>
+            <h3 className="font-bold text-xl text-foreground">Recent Activity</h3>
             <div className="space-y-4">
                 {activityData.length > 0 ? (
-                    activityData.map((event) => (
+                    activityData.map((event, index) => (
                         <a
                             key={event.id}
                             href={event.url}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="block bg-gradient-to-br from-background/50 to-muted/30 rounded-2xl p-5 border border-border hover:border-primary/50 transition-all hover:shadow-lg"
+                            className="block bg-card/40 backdrop-blur-sm rounded-2xl p-5 border border-border/50 hover:border-primary/50 hover:bg-card/60 transition-all duration-300 group"
+                            style={{ animationDelay: `${index * 50}ms` }}
                         >
                             <div className="flex items-start gap-4">
-                                <div className="p-2 rounded-lg bg-muted/40 text-blue-800">
+                                <div className="p-2.5 rounded-xl bg-secondary mobile:hidden sm:block">
                                     {event.icon}
                                 </div>
                                 <div className="flex-1">
-                                    <p className="font-medium text-black">{event.message}</p>
-                                    <p className="text-sm text-white  mt-1">{event.repo}</p>
-                                    <p className="text-xs text-blue-800 font-bold mt-2">{event.time}</p>
+                                    <p className="font-medium text-foreground group-hover:text-primary transition-colors">{event.message}</p>
+                                    <p className="text-sm text-muted-foreground mt-1">{event.repo}</p>
+                                    <p className="text-xs text-muted-foreground/70 font-medium mt-2 flex items-center gap-1">
+                                        <div className="w-1.5 h-1.5 rounded-full bg-border" />
+                                        {event.time}
+                                    </p>
                                 </div>
-                                <ExternalLink className="w-4 h-4 text-muted-foreground mt-1" />
+                                <ExternalLink className="w-4 h-4 text-muted-foreground group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
                             </div>
                         </a>
                     ))
                 ) : (
-                    <div className="text-center py-12">
-                        <Calendar className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
+                    <div className="text-center py-12 bg-card/20 rounded-2xl border border-dashed border-border/50">
+                        <Calendar className="w-12 h-12 text-muted-foreground/30 mx-auto mb-4" />
                         <p className="text-muted-foreground">No recent activity found</p>
                     </div>
                 )}

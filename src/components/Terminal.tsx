@@ -44,6 +44,7 @@ export const Terminal = forwardRef<TerminalHandle, TerminalProps>(({ currentSect
   const [isResponseTyping, setIsResponseTyping] = useState(false);
   const terminalRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const abortRef = useRef(false);
   const { setTheme, availableThemes } = useTheme();
 
   // Expose handleCommand method to parent components
@@ -51,9 +52,40 @@ export const Terminal = forwardRef<TerminalHandle, TerminalProps>(({ currentSect
     handleCommand,
   }));
 
-  // Handle skip intro
+  // Handle Ctrl+C and skip intro
   useEffect(() => {
+    const handleGlobalKeydown = (e: KeyboardEvent) => {
+      // Ctrl+C handling
+      if (e.ctrlKey && e.key === 'c') {
+        if (isLoading || isTyping || isResponseTyping) {
+          e.preventDefault();
+          abortRef.current = true;
+
+          // Immediately stop all activities
+          setIsLoading(false);
+          setIsTyping(false);
+          setIsResponseTyping(false);
+
+          setLines(prev => [...prev, { type: "output", content: "^C" }]);
+
+          // Ensure input is focused and ready
+          setTimeout(() => inputRef.current?.focus(), 10);
+          return;
+        }
+      }
+
+      // Skip introduction on any key
+      if (isTyping && !e.ctrlKey && !e.altKey && !e.metaKey && e.key !== 'Shift' && e.key !== 'Control' && e.key !== 'Alt') {
+        // This logic was partly in the previous useEffect, merging it here for clarity or keeping it separate is fine.
+        // But the previous implementation logic was specific to skipping. 
+        // Let's keep the skip logic as it was but strictly for "skip" action if not Ctrl+C
+      }
+    };
+
+    // Previous skip logic:
     const handleSkip = (e: KeyboardEvent) => {
+      if (e.ctrlKey && e.key === 'c') return; // Handled above
+
       if (isTyping) {
         // Skip all typing
         setIsTyping(false);
@@ -62,17 +94,28 @@ export const Terminal = forwardRef<TerminalHandle, TerminalProps>(({ currentSect
       }
     };
 
+    window.addEventListener("keydown", handleGlobalKeydown);
     if (isTyping) {
       window.addEventListener("keydown", handleSkip);
     }
 
     return () => {
+      window.removeEventListener("keydown", handleGlobalKeydown);
       window.removeEventListener("keydown", handleSkip);
     };
-  }, [isTyping]);
+  }, [isTyping, isLoading, isResponseTyping]);
+
+  useEffect(() => {
+    if (isTyping || isLoading || isResponseTyping) {
+      abortRef.current = false;
+    }
+  }, [isTyping, isLoading, isResponseTyping]);
+
 
   // Typing animation effect for welcome messages
   useEffect(() => {
+    if (abortRef.current) return;
+
     if (isTyping && typingIndex < welcomeMessages.length) {
       const currentMessage = welcomeMessages[typingIndex];
 
@@ -80,6 +123,7 @@ export const Terminal = forwardRef<TerminalHandle, TerminalProps>(({ currentSect
         // Variable typing speed for more natural effect
         const randomSpeed = Math.random() * 30 + 15; // Between 15-45ms
         const timer = setTimeout(() => {
+          if (abortRef.current) return;
           setLines(prev => {
             const newLines = [...prev];
             if (newLines[typingIndex]) {
@@ -103,6 +147,7 @@ export const Terminal = forwardRef<TerminalHandle, TerminalProps>(({ currentSect
         // Move to next message after a delay with random pause
         const randomPause = Math.random() * 300 + 200; // Between 200-500ms
         const timer = setTimeout(() => {
+          if (abortRef.current) return;
           setTypingIndex(prev => prev + 1);
           setTypingCharIndex(0);
         }, randomPause);
@@ -119,11 +164,14 @@ export const Terminal = forwardRef<TerminalHandle, TerminalProps>(({ currentSect
 
   // Typing animation effect for command responses
   useEffect(() => {
+    if (abortRef.current) return;
+
     if (isResponseTyping && responseLineIndex < responseLines.length) {
       const currentLine = responseLines[responseLineIndex];
 
       if (responseCharIndex < currentLine.content.length) {
         const timer = setTimeout(() => {
+          if (abortRef.current) return;
           setLines(prev => {
             const newLines = [...prev];
             // Add the typed character to the last line
@@ -143,6 +191,7 @@ export const Terminal = forwardRef<TerminalHandle, TerminalProps>(({ currentSect
       } else {
         // Move to next line after a delay
         const timer = setTimeout(() => {
+          if (abortRef.current) return;
           // Add a new line for the next response
           if (responseLineIndex < responseLines.length - 1) {
             setLines(prev => [...prev, { type: currentLine.type, content: "" }]);
@@ -189,16 +238,39 @@ export const Terminal = forwardRef<TerminalHandle, TerminalProps>(({ currentSect
     const loadingMessages = config.terminal.loadingMessages;
 
     setIsLoading(true);
+    abortRef.current = false; // Reset abort status
 
     for (const message of loadingMessages) {
+      if (abortRef.current) {
+        setIsLoading(false);
+        return;
+      }
+
       // Variable delay for more natural feel
       const randomDelay = Math.random() * 400 + 100; // Between 100-500ms
       await new Promise((resolve) => setTimeout(resolve, randomDelay));
+
+      if (abortRef.current) {
+        setIsLoading(false);
+        return;
+      }
+
       setLines((prev) => [...prev, { type: "loading", content: `[${new Date().toLocaleTimeString()}] ${message}` }]);
+    }
+
+    if (abortRef.current) {
+      setIsLoading(false);
+      return;
     }
 
     // Add a completion message with a checkmark
     await new Promise((resolve) => setTimeout(resolve, 300));
+
+    if (abortRef.current) {
+      setIsLoading(false);
+      return;
+    }
+
     setLines((prev) => [...prev, { type: "output", content: `[${new Date().toLocaleTimeString()}] ✅ Loading complete` }]);
 
     setIsLoading(false);
@@ -210,6 +282,8 @@ export const Terminal = forwardRef<TerminalHandle, TerminalProps>(({ currentSect
   };
 
   const startResponseTyping = (lines: TerminalLine[]) => {
+    if (abortRef.current) return;
+
     if (lines.length > 0) {
       setResponseLines(lines);
       setResponseLineIndex(0);
@@ -384,6 +458,7 @@ export const Terminal = forwardRef<TerminalHandle, TerminalProps>(({ currentSect
     ];
 
     setLines(newLines);
+    abortRef.current = false; // Reset abort on new command
 
     if (cmd.toLowerCase().trim() === "clear") {
       setLines(isTyping ?
@@ -434,6 +509,15 @@ export const Terminal = forwardRef<TerminalHandle, TerminalProps>(({ currentSect
       const match = ALL_COMMANDS.find(cmd => cmd.startsWith(lowerInput));
       if (match) {
         setInput(match);
+      }
+    } else if (e.ctrlKey && e.key === 'c') {
+      // This can also be caught here if the input has focus, 
+      // but the global listener handles it better when input might be disabled or focus lost.
+      // However, standard terminal behavior is that Ctrl+C in input cancels the current line.
+      if (!isLoading && !isTyping && !isResponseTyping) {
+        e.preventDefault();
+        setLines(prev => [...prev, { type: "input", content: `$ ${input}^C` }]);
+        setInput("");
       }
     }
   };
