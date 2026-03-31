@@ -14,17 +14,82 @@ import Experience from "./Experience";
 import Achievements from "./Achievements";
 import { Certificates } from "./Certificates";
 import { portfolioData } from "@/lib/portfolioData";
+import { useVisitors } from "@/hooks/useVisitors";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { toast } from "@/components/ui/use-toast";
+
 
 const Index = () => {
   const [activeSection, setActiveSection] = useState("home");
   const [isLoading, setIsLoading] = useState(true);
+  const [showEmailModal, setShowEmailModal] = useState(true);
+  const [emailInput, setEmailInput] = useState("");
+  const { hasVisited, setFirstVisitEmail } = useVisitors();
   const terminalRef = useRef<TerminalHandle>(null);
 
+  useEffect(() => {
+    if (hasVisited()) {
+      setShowEmailModal(false);
+    }
+  }, [hasVisited]);
 
+  const handleEmailSubmit = () => {
+    if (setFirstVisitEmail(emailInput)) {
+      toast({
+        title: "Welcome!",
+        description: "Your visit has been recorded. Enjoy the portfolio!",
+      });
+      setEmailInput("");
+      setShowEmailModal(false);
+    } else {
+      toast({
+        variant: "destructive",
+        title: "Invalid email",
+        description: "Please enter a valid email address with @.",
+      });
+    }
+  };
 
   if (isLoading) {
     return <LoadingScreen onComplete={() => setIsLoading(false)} />;
   }
+
+  if (showEmailModal) {
+    return (
+      <div className="fixed inset-0 bg-gray-900/95 flex items-center justify-center z-[10000] p-6">
+        <div className="bg-gray-800/95 border-2 border-gray-600/50 backdrop-blur-none rounded-3xl p-8 max-w-md w-full max-h-[90vh] overflow-y-auto shadow-2xl text-white">
+          <h2 className="text-3xl font-bold text-white mb-4 text-center">Welcome!</h2>
+          <p className="text-gray-200 mb-8 text-center leading-relaxed">
+            Enter your email to access the portfolio and help track visitors.
+          </p>
+          <div className="space-y-6">
+            <Input
+              type="email"
+              placeholder="your@email.com"
+              value={emailInput}
+              onChange={(e) => setEmailInput(e.target.value)}
+              className="w-full bg-white/10 border-2 border-white/30 focus:border-blue-400 focus:ring-4 focus:ring-blue-500/30 text-white placeholder-gray-400 text-xl py-8 px-6 font-bold rounded-2xl shadow-lg"
+              autoFocus
+            />
+            <Button
+              onClick={handleEmailSubmit}
+              className="w-full bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 text-white font-bold text-xl py-8 px-8 rounded-2xl shadow-2xl hover:shadow-3xl transition-all duration-300"
+            >
+              Unlock Portfolio →
+            </Button>
+          </div>
+          <p className="text-xs text-gray-500 mt-6 text-center">
+            Your email is stored locally for visitor stats only.
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+
+
 
   const handleSectionChange = (section: string) => {
     setActiveSection(section);
@@ -86,7 +151,7 @@ const Index = () => {
 
             {/* Profile Cards Area - 25% width on desktop, 100% on mobile */}
             <div className="w-full lg:w-[25%] p-4 lg:p-8 lg:pl-0 flex flex-col gap-4 h-auto lg:h-full">
-              <div className="flex-[2] min-h-0">
+              <div className="flex-[3] min-h-0 overflow-auto">
                 <ProfileCard
                   name={portfolioData.about.name}
                   role={portfolioData.about.role}
@@ -110,6 +175,41 @@ const Index = () => {
     }
   };
 
+  if (showEmailModal) {
+    return (
+      <div className="fixed inset-0 bg-black/80 backdrop-blur-md flex items-center justify-center z-[10000] p-4">
+        <Dialog open={true}>
+          <DialogContent className="bg-[#0D1A2B]/95 backdrop-blur-2xl border-white/20 max-w-md mx-auto text-white max-h-[90vh] overflow-y-auto">
+            <DialogHeader>
+              <DialogTitle className="text-2xl">Welcome to Spandana&apos;s Portfolio!</DialogTitle>
+              <DialogDescription className="text-gray-300">
+                To help track visitors and personalize your experience, please enter your email.
+              </DialogDescription>
+            </DialogHeader>
+            <div className="space-y-4 py-4">
+              <Input
+                type="email"
+                placeholder="your@email.com"
+                value={emailInput}
+                onChange={(e) => setEmailInput(e.target.value)}
+                className="bg-[#1F2D3D]/80 border-white/30 text-white placeholder-gray-400 font-medium"
+                autoFocus
+              />
+            </div>
+            <DialogFooter>
+              <Button
+                onClick={handleEmailSubmit}
+                className="w-full bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600 text-white font-semibold"
+              >
+                Continue to Portfolio
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+      </div>
+    );
+  }
+
   return (
     <div className="flex flex-col md:flex-row h-screen w-full bg-background bg-black overflow-hidden">
       {/* Dock Sidebar */}
@@ -131,6 +231,7 @@ const Index = () => {
     </div>
   );
 };
+
 
 export default Index;
 

@@ -7,7 +7,8 @@ interface Visitor {
 
 export function useVisitors() {
   const [visitors, setVisitors] = useState<Visitor[]>([]);
-  const [stats, setStats] = useState<{ count: number; lastVisit?: string }>({ count: 0 });
+  const [stats, setStats] = useState<{ count: number }>({ count: 0 });
+
 
   useEffect(() => {
     try {
@@ -16,45 +17,41 @@ export function useVisitors() {
         const parsed: Visitor[] = JSON.parse(data);
         setVisitors(parsed);
         if (parsed.length > 0) {
-          const last = parsed[parsed.length - 1];
-          const date = new Intl.DateTimeFormat('en-US', {
-            weekday: 'long',
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric',
-            hour: '2-digit',
-            minute: '2-digit',
-          }).format(new Date(last.timestamp));
-          setStats({ count: parsed.length, lastVisit: date });
+          setStats({ count: parsed.length });
         }
+
       }
     } catch {
       console.error('Failed to load visitors');
     }
   }, []);
 
-  const recordVisit = (email: string) => {
+  const hasVisited = (): boolean => {
+    try {
+      return localStorage.getItem('hasVisitedPortfolio') === 'true';
+    } catch {
+      return false;
+    }
+  };
+
+  const setFirstVisitEmail = (email: string): boolean => {
     if (!email || !email.includes('@')) return false;
     try {
+      // Set flag
+      localStorage.setItem('hasVisitedPortfolio', 'true');
+      // Record visitor
       const newVisitor: Visitor = { email, timestamp: Date.now() };
       const updated = [...visitors, newVisitor];
       localStorage.setItem('portfolioVisitors', JSON.stringify(updated));
       setVisitors(updated);
-      const date = new Intl.DateTimeFormat('en-US', {
-        weekday: 'long',
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit',
-      }).format(new Date(newVisitor.timestamp));
-      setStats({ count: updated.length, lastVisit: date });
+      setStats({ count: updated.length });
       return true;
     } catch {
       return false;
     }
   };
 
-  return { stats, recordVisit };
+  return { stats, hasVisited, setFirstVisitEmail };
+
 }
 
