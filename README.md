@@ -1,8 +1,8 @@
-# 🚀 Nathishwar's Interactive Terminal Portfolio
+# 🚀 Spandana's Interactive Terminal Portfolio
 
 A futuristic, high-performance developer portfolio merging the aesthetics of a macOS terminal with advanced web technologies. Built with React, TypeScript, and Three.js, this application offers an immersive user experience through interactive command-line interfaces, 3D visualizations, and a sleek, responsive design.
 
-![Portfolio Preview](public/Perfect_dp_1.jpg)
+![Portfolio Preview](----------ADD PREVIEW------)
 
 ## 🌟 Key Features
 

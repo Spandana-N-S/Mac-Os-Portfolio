@@ -349,20 +349,11 @@ export const Terminal = forwardRef<TerminalHandle, TerminalProps>(({ currentSect
         ];
 
       case "projects":
-        const projectLines: TerminalLine[] = [
-          { type: "output", content: "My Projects (click to view details):" },
-          { type: "output", content: "" },
+        setCurrentModalSection("projects");
+        setIsModalOpen(true);
+        return [
+          { type: "output", content: `Opening Projects section...` },
         ];
-        portfolioData.projects.forEach((project, index) => {
-          projectLines.push(
-            { type: "output", content: `${index + 1}. ${project.name}` },
-            { type: "output", content: `   ${project.description}` },
-            { type: "output", content: `   Tech: ${project.tech.join(", ")}` },
-            { type: "output", content: `   Type 'project ${index + 1}' to open details` },
-            { type: "output", content: "" }
-          );
-        });
-        return projectLines;
 
       case "skills":
         setCurrentModalSection("skills");
@@ -426,9 +417,9 @@ export const Terminal = forwardRef<TerminalHandle, TerminalProps>(({ currentSect
 
       default:
         if (command.startsWith("theme ")) {
-          const themeName = command.split(" ")[1];
-          if (availableThemes.includes(themeName as any)) {
-            setTheme(themeName as any);
+          const themeName = command.split(" ")[1] as Theme;
+          if (availableThemes.includes(themeName)) {
+            setTheme(themeName);
             return [
               { type: "output", content: `Theme switched to ${themeName}` },
             ];
@@ -558,9 +549,7 @@ export const Terminal = forwardRef<TerminalHandle, TerminalProps>(({ currentSect
                 <span className="ml-1 animate-pulse">|</span>
               )}
               {/* Cursor for response typing */}
-              {isResponseTyping && index === lines.length - 1 && responseLineIndex < responseLines.length &&
-                responseLineIndex === index - (lines.length - responseLines.length) &&
-                responseCharIndex < line.content.length && (
+{isResponseTyping && index === lines.length - 1 && responseCharIndex < line.content.length && (
                   <span className="ml-1 animate-pulse">|</span>
                 )}
             </div>
@@ -608,7 +597,7 @@ export const Terminal = forwardRef<TerminalHandle, TerminalProps>(({ currentSect
           open={isModalOpen}
           onOpenChange={setIsModalOpen}
           section={currentModalSection}
-          data={portfolioData[currentModalSection as keyof typeof portfolioData]}
+  data={portfolioData[currentModalSection as keyof typeof portfolioData] as any}
         />
       )}
     </>

@@ -2,6 +2,11 @@ import Achive from "@/components/Sphere";
 import React from "react";
 import { portfolioData } from "@/lib/portfolioData";
 import {
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from "@/components/ui/hover-card"
+import {
   Star,
   Trophy,
   GitPullRequest,
@@ -61,31 +66,72 @@ export default function Achievements() {
 
         {/* Achievements Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-20">
-          {portfolioData.achievements.map((item, idx) => (
-            <div
-              key={idx}
-              className="group relative p-6 rounded-2xl bg-[#0D1A2B]/40 backdrop-blur-md border border-white/5 hover:border-cyan-500/30 transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_0_30px_rgba(8,145,178,0.1)]"
-            >
-              {/* Card Glow */}
-              <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-cyan-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+          {portfolioData.achievements.map((item, idx) => {
+            if (idx === 0) {
+              return (
+                <HoverCard key={idx}>
+                  <HoverCardTrigger className="w-full">
+                    <div className="group relative p-6 rounded-2xl bg-[#0D1A2B]/40 backdrop-blur-md border border-white/5 hover:border-cyan-500/30 transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_0_30px_rgba(8,145,178,0.1)] cursor-pointer">
+                      {/* Card Glow */}
+                      <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-cyan-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
-              <div className="relative flex items-start gap-4">
-                <div className="p-3 rounded-xl bg-white/5 border border-white/10 group-hover:scale-110 transition-transform duration-300">
-                  {getIcon(item.icon)}
-                </div>
-                <div>
-                  <h3 className="text-xl font-bold text-white mb-2 group-hover:text-cyan-400 transition-colors">{item.title}</h3>
-                  <p className="text-slate-400 text-sm leading-relaxed mb-3">
-                    {item.description}
-                  </p>
-                  <div className="inline-flex items-center gap-2 px-2 py-1 rounded-md bg-white/5 border border-white/5 text-xs font-mono text-cyan-300">
-                    <Zap className="w-3 h-3" />
-                    {item.date}
+                      <div className="relative flex items-start gap-4">
+                        <div className="p-3 rounded-xl bg-white/5 border border-white/10 group-hover:scale-110 transition-transform duration-300">
+                          {getIcon(item.icon)}
+                        </div>
+                        <div>
+                          <h3 className="text-xl font-bold text-white mb-2 group-hover:text-cyan-400 transition-colors">{item.title}</h3>
+                          <p className="text-slate-400 text-sm leading-relaxed mb-3">
+                            {item.description}
+                          </p>
+                          <div className="inline-flex items-center gap-2 px-2 py-1 rounded-md bg-white/5 border border-white/5 text-xs font-mono text-cyan-300">
+                            <Zap className="w-3 h-3" />
+                            {item.date}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </HoverCardTrigger>
+                  <HoverCardContent className="w-80 p-0 bg-[#0D1A2B]/90 backdrop-blur-md border-white/10">
+                    <img 
+                      src="/Moxo.jpeg" 
+                      alt="Moxo Top Market Researcher Award" 
+                      className="w-full h-48 object-cover rounded-t-lg" 
+                    />
+                    <div className="p-4 space-y-2">
+                      <h4 className="font-bold text-lg text-white">Top Market Researcher</h4>
+                      <p className="text-sm text-slate-400">Outstanding performance recognition at Moxo</p>
+                    </div>
+                  </HoverCardContent>
+                </HoverCard>
+              );
+            }
+            return (
+              <div
+                key={idx}
+                className="group relative p-6 rounded-2xl bg-[#0D1A2B]/40 backdrop-blur-md border border-white/5 hover:border-cyan-500/30 transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_0_30px_rgba(8,145,178,0.1)]"
+              >
+                {/* Card Glow */}
+                <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-cyan-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+
+                <div className="relative flex items-start gap-4">
+                  <div className="p-3 rounded-xl bg-white/5 border border-white/10 group-hover:scale-110 transition-transform duration-300">
+                    {getIcon(item.icon)}
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-bold text-white mb-2 group-hover:text-cyan-400 transition-colors">{item.title}</h3>
+                    <p className="text-slate-400 text-sm leading-relaxed mb-3">
+                      {item.description}
+                    </p>
+                    <div className="inline-flex items-center gap-2 px-2 py-1 rounded-md bg-white/5 border border-white/5 text-xs font-mono text-cyan-300">
+                      <Zap className="w-3 h-3" />
+                      {item.date}
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
 
         {/* Publications Section */}

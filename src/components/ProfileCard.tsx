@@ -1,8 +1,12 @@
 import { useState } from "react";
-import { Github, Globe, Linkedin, Twitter, Instagram, Mail } from "lucide-react";
+import { Github, Globe, Linkedin, Twitter, Instagram, Mail, Users, Eye, X } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { GitHubActivityRedesigned } from "./GitHubActivityRedesigned";
 import { portfolioData } from "@/lib/portfolioData";
 import { cn } from "@/lib/utils";
+import { useVisitors } from "@/hooks/useVisitors";
 
 interface ProfileCardProps {
   name: string;
@@ -32,11 +36,23 @@ export const ProfileCard = ({
   email
 }: ProfileCardProps) => {
   const [showGitHubActivity, setShowGitHubActivity] = useState(false);
+  const [showVisitorsDialog, setShowVisitorsDialog] = useState(false);
+  const [emailInput, setEmailInput] = useState("");
+  const { stats, recordVisit } = useVisitors();
 
   // Extract GitHub username from the URL
-  const githubUsername = github.split('/').pop() || "nathishwar";
+  const githubUsername = github.split('/').pop() || "Spandana";
   const mailto = (email: string) => {
     window.location.href = `mailto:${email}`;
+  };
+
+  const handleRecordVisit = () => {
+    if (recordVisit(emailInput)) {
+      setEmailInput("");
+      setShowVisitorsDialog(false);
+    } else {
+      alert("Please enter a valid email");
+    }
   };
 
   return (
@@ -71,8 +87,56 @@ export const ProfileCard = ({
         {/* Bio */}
         <div className="p-6 flex-1">
           <p className="text-foreground/80 text-center text-gray-300">
-            Code is my craft, and building great user experience is my passion.
+{bio}
           </p>
+        </div>
+
+        {/* Visitors Section */}
+        <div className="px-6 py-4 border-t border-white/10">
+          <div className="flex items-center justify-between mb-3">
+            <div className="flex items-center gap-2">
+              <div className="w-8 h-8 bg-gradient-to-br from-green-500 to-emerald-600 rounded-lg flex items-center justify-center shadow-lg">
+                <Users className="w-4 h-4 text-white" />
+              </div>
+              <div>
+                <p className="text-sm font-semibold text-white">{stats.count} visitors</p>
+                {stats.lastVisit && <p className="text-xs text-gray-400">{stats.lastVisit}</p>}
+              </div>
+            </div>
+            <Dialog open={showVisitorsDialog} onOpenChange={setShowVisitorsDialog}>
+              <DialogTrigger asChild>
+                <Button size="sm" className="bg-gradient-to-r from-cyan-500/20 to-blue-500/20 border-white/20 hover:from-cyan-500/30 hover:to-blue-500/30 text-white">
+                  <Eye className="w-4 h-4 mr-1" />
+                  Record Visit
+                </Button>
+              </DialogTrigger>
+              <DialogContent className="bg-[#0D1A2B]/90 backdrop-blur-xl border-white/10 text-white">
+                <DialogHeader>
+                  <DialogTitle>Record Your Visit</DialogTitle>
+                  <DialogDescription className="text-gray-300">
+                    Enter your email to be counted as a visitor.
+                  </DialogDescription>
+                </DialogHeader>
+                <div className="space-y-4">
+                  <Input
+                    type="email"
+                    placeholder="your@email.com"
+                    value={emailInput}
+                    onChange={(e) => setEmailInput(e.target.value)}
+                    className="bg-[#1F2D3D] border-white/20 text-white placeholder-gray-400"
+                  />
+                </div>
+                <DialogFooter>
+                  <Button variant="outline" onClick={() => {setShowVisitorsDialog(false); setEmailInput("");}}>
+                    Cancel
+                  </Button>
+                  <Button onClick={handleRecordVisit} className="bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600">
+                    Confirm Visit
+                  </Button>
+                </DialogFooter>
+              </DialogContent>
+            </Dialog>
+          </div>
         </div>
 
         {/* Social Links */}

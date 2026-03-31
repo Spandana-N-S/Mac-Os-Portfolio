@@ -1,7 +1,7 @@
 /// <reference types="vite/client" />
 
 // Extend JSX namespace to include custom elements
-declare namespace JSX {
+// declare namespace JSX {
   interface IntrinsicElements {
     "pixel-canvas": React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> & {
       "data-gap"?: number | string;
@@ -11,4 +11,4 @@ declare namespace JSX {
       "data-no-focus"?: string;
     };
   }
-}
+

@@ -19,96 +19,42 @@ interface Milestone {
 
 const MILESTONES: Milestone[] = [
   {
-    role: "AI Full Stack Developer Intern",
-    company: "Tech Innovations Inc.",
-    date: "Jan 2022 – Mar 2024",
-    description:
-      "Led enterprise web & AI features across front-end, back-end, and cloud.",
+    role: "Market Research Analyst",
+    company: "MOXO, Bangalore",
+    date: "Feb 2025 – Jan 2026",
+    description: "Delivered end-to-end B2B lead generation: research → ICP → decision-makers → qualified lists, filling pipelines 3–5× faster.",
     achievements: [
-      "Architected microservices for 100k+ users.",
-      "Built internal RAG documentation search.",
-      "Cut deploy time 60% with CI/CD.",
-    ],
-    color: "cyan",
-    status: "completed",
-    t: 0.08,
-    rightSide: false,
-  },
-  {
-    role: "Frontend Developer Intern",
-    company: "Digital Solutions LLC",
-    date: "Mar 2020 – Dec 2021",
-    description:
-      "React/Vue developer; partnered with Design for pixel-perfect UI.",
-    achievements: [
-      "Shipped 15+ production apps.",
-      "Created a shared design system used by 8 teams.",
-    ],
-    color: "blue",
-    status: "completed",
-    t: 0.32, // shifted position
-    rightSide: true,
-  },
-  {
-    role: "Junior Web Developer Intern",
-    company: "StartUp Ventures",
-    date: "Jun 2018 – Feb 2020",
-    description:
-      "Maintained sites & internal tools; learned full-stack fundamentals.",
-    achievements: [
-      "Built internal CMS for content editors.",
-      "Improved SEO → +50% organic traffic.",
-    ],
-    color: "violet",
-    status: "completed",
-    t: 0.48,
-    rightSide: true,
-  },
-  {
-    role: "Python Developer Intern",
-    company: "Ascender",
-    date: "Apr 2024 – Jun 2024",
-    description:
-      "APIs, automation & data tooling with Python; delivery speed focus.",
-    achievements: [
-      "Reduced build times by 35% with parallel jobs.",
-      "Shipped internal CLI used by 10+ engineers.",
+      "Built and delivered high-quality B2B lead lists (8,000+ contacts) using LinkedIn Sales Navigator, ZoomInfo, achieving 90–95% accuracy.",
+      "Ideal Customer Profile (ICP) Development for enterprises across 7+ industries.",
+      "Recognized as #1 Market Researcher company-wide for outstanding performance.",
+      "Generated 300-400 qualified leads per week across SaaS, IT Services, Digital Marketing.",
+      "Received Special Acknowledgement from leadership.",
     ],
     color: "emerald",
     status: "completed",
-    t: 0.25,
-    rightSide: true,
-  },
-  {
-    role: "AI/ML Engineer — Internship",
-    company: "Google",
-    date: "May 2023 – Aug 2023",
-    description:
-      "Prototyped models & eval pipelines; collaborated with research.",
-    achievements: [
-      "Improved inference by 18% via quantization.",
-      "Built dataset-drift visualization tool.",
-    ],
-    color: "amber",
-    status: "completed",
-    t: 0.74,
-    rightSide: true,
-  },
-  {
-    role: "ML Engineer — Internship",
-    company: "Unified Mentor",
-    date: "Sep 2023 – Dec 2023",
-    description:
-      "Training pipelines & MLOps; added accuracy/quality monitoring.",
-    achievements: [
-      "Feature extraction automation; F1 = 0.92.",
-      "Data validation checks integrated in CI.",
-    ],
-    color: "rose",
-    status: "completed",
-    t: 0.9,
+    t: 0.3,
     rightSide: false,
   },
+  {
+    role: "Full-Stack Development Upskilling",
+    company: "Personal Projects",
+    date: "Jan 2026 – Present",
+    description: "Dedicated full-time to advanced technical training & building production-ready portfolio using React, Next.js, TypeScript. Engineering scalable web applications & refining frontend architecture skills.",
+    achievements: [
+      "Actively contributing to GitHub & staying current with industry best practices in full-stack development.",
+      "Full Stack Web Development Certificate from Codecraft Academy | Udemy.",
+      "Women In Tech Programme - Web Mobile Applications from Nirmaan Organization.",
+    ],
+    color: "cyan",
+    status: "current",
+    t: 0.7,
+    rightSide: true,
+  },
+
+
+
+
+
 ];
 
 const TW = {
@@ -355,7 +301,7 @@ export default function ExperienceTimelinePro() {
                     <Badge status={m.status} />
                   </div>
 
-                  <p className="text-slate-400 text-sm mt-3 line-clamp-3">{m.description}</p>
+  <p className="text-slate-400 text-sm mt-3">{m.description}</p>
 
                   <ul className="mt-4 space-y-2 pr-1">
                     {m.achievements.map((a, idx) => (

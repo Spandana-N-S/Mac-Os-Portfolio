@@ -4,6 +4,7 @@ import { Terminal, TerminalHandle } from "@/components/Terminal";
 import { LoadingScreen } from "@/components/LoadingScreen";
 import { ProfileCard } from "@/components/ProfileCard";
 import { GitHubActivityCard } from "@/components/GitHubActivityCard";
+import { Gallery } from "@/components/Gallery";
 import { About } from "./About";
 import { Projects } from "./Projects";
 import { Skills } from "./Skills";
@@ -19,26 +20,7 @@ const Index = () => {
   const [isLoading, setIsLoading] = useState(true);
   const terminalRef = useRef<TerminalHandle>(null);
 
-  // Load the Easy Peasy chatbot script
-  useEffect(() => {
-    const script = document.createElement("script");
-    script.src = "https://bots.easy-peasy.ai/chat.min.js";
-    script.defer = true;
-    script.setAttribute("data-chat-url", "https://bots.easy-peasy.ai/bot/6fc51d13-714c-4afd-bf29-1ef67377b663");
-    script.setAttribute("data-btn-position", "bottom-left");
-    script.setAttribute("data-widget-btn-color", "#1F2D3D");
-    script.id = "easy-peasy-bot-script";
 
-    document.body.appendChild(script);
-
-    return () => {
-      // Clean up the script when the component unmounts
-      const existingScript = document.getElementById("easy-peasy-bot-script");
-      if (existingScript) {
-        document.body.removeChild(existingScript);
-      }
-    };
-  }, []);
 
   if (isLoading) {
     return <LoadingScreen onComplete={() => setIsLoading(false)} />;
@@ -59,7 +41,8 @@ const Index = () => {
           resume: "resume",
           experience: "experience",
           achievements: "achievements",
-          certificates: "certificates"
+          certificates: "certificates",
+          gallery: ""
         };
 
         const command = commandMap[section];
@@ -86,6 +69,8 @@ const Index = () => {
         return <Experience />;
       case "achievements":
         return <Achievements />;
+      case "gallery":
+        return <Gallery />;
       case "certificates":
         return <Certificates />;
       default:
@@ -110,8 +95,8 @@ const Index = () => {
                   location={portfolioData.about.location}
                   github={portfolioData.contact.github}
                   linkedin={portfolioData.contact.linkedin}
-                  twitter={portfolioData.contact.twitter}
-                  website={portfolioData.contact.website}
+                  twitter=""
+                  website=""
                   instagram={portfolioData.contact.instagram}
                   email={portfolioData.contact.email}
                 />
@@ -127,19 +112,19 @@ const Index = () => {
 
   return (
     <div className="flex flex-col md:flex-row h-screen w-full bg-background bg-black overflow-hidden">
-      {/* Dock Sidebar - Hidden on mobile, or bottom? For now, sidebar on tablet+ */}
+      {/* Dock Sidebar */}
       <div className="hidden md:block w-20 lg:w-24 bg-gradient-to-b from-[#0d1a2b] via-[#1f2d3d] to-[#3c4b57] border-r border-border/50 shrink-0 relative z-50">
         <Dock activeSection={activeSection} onSectionChange={handleSectionChange} />
       </div>
 
-      {/* Main Content Area */}
+      {/* Main Content */}
       <div className="flex-1 overflow-hidden relative">
         {renderActiveSection()}
 
-        {/* Mobile Dock (Bottom Bar) */}
+        {/* Mobile Dock */}
         <div className="md:hidden absolute bottom-4 left-0 right-0 flex justify-center z-50 pointer-events-none">
           <div className="bg-black/20 backdrop-blur-md rounded-2xl pointer-events-auto">
-            <Dock activeSection={activeSection} onSectionChange={handleSectionChange} isMobile={true} />
+            <Dock activeSection={activeSection} onSectionChange={handleSectionChange} isMobile />
           </div>
         </div>
       </div>
@@ -148,3 +133,4 @@ const Index = () => {
 };
 
 export default Index;
+

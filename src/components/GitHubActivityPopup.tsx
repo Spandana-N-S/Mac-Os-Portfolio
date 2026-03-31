@@ -8,7 +8,7 @@ export const GitHubActivityPopup = ({ onClose }: { onClose: () => void }) => {
   const [loading, setLoading] = useState(false);
 
   // Extract GitHub username from the URL
-  const githubUsername = portfolioData.contact.github.split('/').pop() || "Nathishwar-prog";
+  const githubUsername = portfolioData.contact.github.split('/').pop() || "Spandana-prog";
 
   const fetchGitHubData = async () => {
     try {
@@ -30,14 +30,14 @@ export const GitHubActivityPopup = ({ onClose }: { onClose: () => void }) => {
         {
           id: 1,
           type: "PushEvent",
-          repo: "Nathishwar-prog/ai-web-app",
+          repo: "Spandana-prog/ai-web-app",
           message: "Updated machine learning model integration",
           time: "2 hours ago"
         },
         {
           id: 2,
           type: "IssuesEvent",
-          repo: "Nathishwar-prog/ml-dashboard",
+          repo: "Spandana-prog/ml-dashboard",
           message: "Fixed data visualization bug",
           time: "1 day ago"
         },
@@ -51,14 +51,14 @@ export const GitHubActivityPopup = ({ onClose }: { onClose: () => void }) => {
         {
           id: 4,
           type: "PushEvent",
-          repo: "Nathishwar-prog/portfolio-website",
+          repo: "Spandana-prog/portfolio-website",
           message: "Added GitHub analytics feature",
           time: "3 days ago"
         },
         {
           id: 5,
           type: "IssuesEvent",
-          repo: "Nathishwar-prog/ecommerce-platform",
+          repo: "Spandana-prog/ecommerce-platform",
           message: "Implemented payment processing",
           time: "1 week ago"
         }

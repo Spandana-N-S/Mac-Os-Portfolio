@@ -1,12 +1,12 @@
 import { useState } from "react";
-import { Github, Linkedin, Twitter, Mail, Globe } from "lucide-react";
+import { Github, Linkedin, Instagram, Mail } from "lucide-react";
 import { portfolioData } from "@/lib/portfolioData";
 
 export const Contact = () => {
   const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    message: ""
+    name: "Spandana N S",
+    email: "spandanans28@gmail.com",
+    message: "Questions? Ideas? Let's connect."
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -22,15 +22,14 @@ export const Contact = () => {
     // Handle form submission
     console.log("Form submitted:", formData);
     alert("Thank you for your message! I'll get back to you soon.");
-    setFormData({ name: "", email: "", message: "" });
+    setFormData({ name: "Spandana", email: "spandanans28@gmail.com", message: "Let's connect!" });
   };
 
   const socialLinks = [
     { icon: Github, url: `https://${portfolioData.contact.github}`, label: "GitHub" },
     { icon: Linkedin, url: `https://${portfolioData.contact.linkedin}`, label: "LinkedIn" },
-    { icon: Twitter, url: `https://twitter.com/${portfolioData.contact.twitter}`, label: "Twitter" },
+    { icon: Instagram, url: `https://${portfolioData.contact.instagram}`, label: "Instagram" },
     { icon: Mail, url: `mailto:${portfolioData.contact.email}`, label: "Email" },
-    { icon: Globe, url: `https://${portfolioData.contact.website}`, label: "Website" },
   ];
 
   return (
@@ -56,20 +55,7 @@ export const Contact = () => {
               </div>
             </div>
             
-            <div className="flex items-center">
-              <Globe className="w-6 h-6 text-primary mr-4" />
-              <div>
-                <h3 className="font-semibold text-foreground">Website</h3>
-                <a 
-                  href={`https://${portfolioData.contact.website}`} 
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-muted-foreground hover:text-primary transition-colors"
-                >
-                  {portfolioData.contact.website}
-                </a>
-              </div>
-            </div>
+
           </div>
           
           <div className="mt-8">

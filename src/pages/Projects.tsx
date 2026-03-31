@@ -2,7 +2,7 @@ import { portfolioData } from "@/lib/portfolioData";
 import { PixelCanvasDemo } from "@/components/ParallexComp";
 import { ProjectModal } from "@/components/ProjectModal";
 import { useState, useMemo } from "react";
-import { Search, Filter } from "lucide-react";
+import { Search, Filter, Github } from "lucide-react";
 
 export const Projects = () => {
   const [selectedProject, setSelectedProject] = useState<any>(null);
@@ -10,11 +10,14 @@ export const Projects = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedTech, setSelectedTech] = useState<string | null>(null);
 
+// Helper to get tech array from subtitle
+  const getTech = (project: any) => project.subtitle ? project.subtitle.split(',').map((t: string) => t.trim()).filter(Boolean) : [];
+
   // Get all unique technologies
   const allTechnologies = useMemo(() => {
     const techSet = new Set<string>();
     portfolioData.projects.forEach(project => {
-      project.tech.forEach(tech => techSet.add(tech));
+      getTech(project).forEach(tech => techSet.add(tech));
     });
     return Array.from(techSet).sort();
   }, []);
@@ -22,10 +25,11 @@ export const Projects = () => {
   // Filter projects based on search term and selected technology
   const filteredProjects = useMemo(() => {
     return portfolioData.projects.filter(project => {
-      const matchesSearch = project.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
+      const matchesSearch = project.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
                            project.description.toLowerCase().includes(searchTerm.toLowerCase());
       
-      const matchesTech = selectedTech ? project.tech.includes(selectedTech) : true;
+      const techArray = getTech(project);
+      const matchesTech = selectedTech ? techArray.includes(selectedTech) : true;
       
       return matchesSearch && matchesTech;
     });
@@ -37,7 +41,8 @@ export const Projects = () => {
   };
 
   const handleProjectLive = (project: any) => {
-    window.open(project.live, "_blank");
+    const liveUrl = project.live || project.codeLink || "https://spandana-projects.netlify.app/";
+    window.open(liveUrl, "_blank");
   };
 
   const handleProjectCode = (project: any) => {
@@ -98,7 +103,7 @@ export const Projects = () => {
                 ))}
               </select>
             </div>
-            <button className="border border-white/20 rounded-lg px-4 py-2" onClick={() => window.open("https://nathishwar-projects.netlify.app/", "_blank")}>View All Projects</button>
+            <button className="border border-white/20 rounded-lg px-4 py-2 hover:bg-white/10 transition-all" onClick={() => window.open("https://github.com/Spandana-N-S", "_blank")}>View All Projects</button>
           </div>
 
           {/* PROJECT GRID */}
@@ -118,7 +123,7 @@ export const Projects = () => {
                   <div className="flex justify-between items-start">
                     <div>
                       <h2 className="text-2xl font-bold text-[#E7ECF4]">
-                        {project.name}
+                        {project.title}
                       </h2>
                       <p className="text-[#A3B1C4] mt-2">
                         {project.description}
@@ -135,7 +140,7 @@ export const Projects = () => {
 
                   {/* Technology Tags */}
                   <div className="flex flex-wrap gap-2 mt-4">
-                    {project.tech.slice(0, 3).map((tech, techIndex) => (
+                    {getTech(project).slice(0, 3).map((tech, techIndex) => (
                       <span 
                         key={techIndex} 
                         className="px-2 py-1 bg-cyan-600/20 text-cyan-300 text-xs rounded-full border border-cyan-500/30"
@@ -143,9 +148,9 @@ export const Projects = () => {
                         {tech}
                       </span>
                     ))}
-                    {project.tech.length > 3 && (
+                    {getTech(project).length > 3 && (
                       <span className="px-2 py-1 bg-purple-600/20 text-purple-300 text-xs rounded-full border border-purple-500/30">
-                        +{project.tech.length - 3} more
+                        +{getTech(project).length - 3} more
                       </span>
                     )}
                   </div>
@@ -158,6 +163,19 @@ export const Projects = () => {
                     >
                       <PixelCanvasDemo />
                     </div>
+                  </div>
+
+                  {/* Pixel Canvas GitHub Link */}
+                  <div className="mt-4 flex justify-center">
+                    <a
+                      href={project.codeLink}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2 bg-gradient-to-br from-[#24292F] to-[#1A1F24] text-white hover:from-[#2D363E] hover:to-[#21262D] shadow-lg hover:shadow-[0_0_15px_#4285f555] transition-all border border-gray-700/50"
+                    >
+                      <Github className="h-4 w-4" />
+                      View on GitHub
+                    </a>
                   </div>
 
                   {/* Buttons */}
@@ -181,7 +199,7 @@ export const Projects = () => {
                       bg-gradient-to-br from-[#0D1A2B]/80 via-[#1F2D3D]/70 to-[#3C4B57]/70
                       hover:bg-white/10 transition-all
                     "
-                    onClick={() => handleProjectCode(project)}
+                      onClick={() => handleProjectCode(project)}
                     >
                       View Code
                     </button>

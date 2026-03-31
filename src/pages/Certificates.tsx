@@ -28,21 +28,53 @@ export const Certificates = () => {
           </p>
         </div>
 
-        {/* Certificates Grid - Smart Card Look */}
+        {/* Certificates PDF Viewer - PROMINENT */}
+        <div className="mb-20">
+          <h2 className="text-3xl font-bold mb-8 border-b border-white/20 pb-4 text-center flex items-center justify-center gap-3">
+            📄 <span>Certificates Collection PDF</span>
+          </h2>
+          <div className="bg-gradient-to-br from-slate-900/90 to-slate-800/70 rounded-3xl p-6 border border-green-500/30 shadow-2xl backdrop-blur-xl max-w-4xl mx-auto">
+            <iframe 
+              src="/Certificates.pdf#toolbar=0&navpanes=0&scrollbar=0" 
+              className="w-full h-[60vh] lg:h-[70vh] rounded-2xl border-0 shadow-2xl"
+              title="Certificates PDF Viewer"
+            />
+            <div className="flex flex-col sm:flex-row gap-4 mt-6 pt-6 border-t border-white/10 justify-center">
+              <a 
+                href="/Certificates.pdf" 
+                download 
+                className="px-8 py-3 bg-gradient-to-r from-green-500 to-green-600 text-white font-bold rounded-2xl shadow-lg hover:shadow-xl transition-all flex items-center gap-2 mx-auto sm:mx-0"
+              >
+                📥 Download PDF
+              </a>
+              <a 
+                href="/Certificates.pdf" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="px-8 py-3 bg-gradient-to-r from-cyan-500 to-cyan-600 text-white font-bold rounded-2xl shadow-lg hover:shadow-xl transition-all flex items-center gap-2 mx-auto sm:mx-0"
+              >
+                🔗 View Fullscreen
+              </a>
+            </div>
+            <p className="text-center text-xs text-slate-400 mt-4 opacity-80">
+              * Complete collection of all certifications. Zoom/Pan supported.
+            </p>
+          </div>
+        </div>
+
+        {/* Individual Certificates Grid - Smart Card Look */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-20">
           {portfolioData.certificates.map((cert, index) => (
             <div
               key={index}
-              className="
-                group relative
+              className="group relative
                 bg-[#121214] 
                 rounded-xl overflow-hidden
                 border border-white/5
                 hover:border-green-500/30
                 transition-all duration-300
                 hover:-translate-y-1
-                hover:shadow-[0_0_20px_rgba(34,197,94,0.1)]
-              "
+                hover:shadow-[0_0_20px_rgba(34,197,94,0.1)]"
             >
               {/* Top Bar - Card Stripe */}
               <div className="h-1 w-full bg-gradient-to-r from-green-500 via-cyan-500 to-green-500 opacity-50" />
@@ -70,13 +102,13 @@ export const Certificates = () => {
 
                 {/* ID & Date */}
                 <div className="flex items-center justify-between text-xs font-mono text-slate-500 mt-6 pt-4 border-t border-white/5">
-                  <span>ID: {cert.credentialId.substring(0, 10)}...</span>
+                  <span>ID: {cert.credentialId ? cert.credentialId.substring(0, 10) + '...' : 'N/A'}</span>
                   <span>{cert.date}</span>
                 </div>
 
                 {/* Hover Reveal Link */}
                 <a
-                  href={cert.link}
+                  href={cert.link || cert.pdfLink || '#'}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="absolute inset-0 flex items-center justify-center bg-black/80 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300"
@@ -137,7 +169,6 @@ export const Certificates = () => {
             ))}
           </div>
         </div>
-
       </div>
     </div>
   );

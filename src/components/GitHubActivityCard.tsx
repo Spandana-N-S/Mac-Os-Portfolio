@@ -8,7 +8,7 @@ export const GitHubActivityCard = () => {
   const [loading, setLoading] = useState(true);
 
   // Extract GitHub username from the URL
-  const githubUsername = portfolioData.contact.github.split('/').pop() || "Nathishwar-prog";
+  const githubUsername = portfolioData.contact.github.split('/').pop() || "Spandana-prog";
 
   const fetchGitHubData = async () => {
     try {
@@ -30,14 +30,14 @@ export const GitHubActivityCard = () => {
         {
           id: 1,
           type: "PushEvent",
-          repo: "Nathishwar-prog/ai-web-app",
+          repo: "Spandana-prog/ai-web-app",
           message: "Updated machine learning model integration",
           time: "2 hours ago"
         },
         {
           id: 2,
           type: "IssuesEvent",
-          repo: "Nathishwar-prog/ml-dashboard",
+          repo: "Spandana-prog/ml-dashboard",
           message: "Fixed data visualization bug",
           time: "1 day ago"
         },

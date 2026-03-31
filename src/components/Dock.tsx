@@ -1,4 +1,4 @@
-import { Home, User, Code, Briefcase, Trophy, FileText, Award, Medal } from "lucide-react";
+import { Home, User, Code, Briefcase, Trophy, FileText, Award, Medal, Image } from "lucide-react";
 import { useState, useRef } from "react";
 
 interface DockProps {
@@ -16,9 +16,11 @@ export const Dock = ({ activeSection, onSectionChange, isMobile = false }: DockP
     { id: "about", icon: User, label: "About" },
     { id: "projects", icon: Code, label: "Projects" },
     { id: "skills", icon: Award, label: "Skills" },
+    { id: "resume", icon: FileText, label: "Resume" },
     { id: "experience", icon: Briefcase, label: "Experience" },
     { id: "achievements", icon: Trophy, label: "Achievements" },
     { id: "certificates", icon: Medal, label: "Certificates" },
+    { id: "gallery", icon: Image, label: "Gallery" },
   ];
 
   // Calculate scale based on distance from hovered item
@@ -93,3 +95,4 @@ export const Dock = ({ activeSection, onSectionChange, isMobile = false }: DockP
     </div>
   );
 };
+

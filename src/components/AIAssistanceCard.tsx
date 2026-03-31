@@ -5,22 +5,7 @@ export const AIAssistanceCard = () => {
   const [showChat, setShowChat] = useState(false);
   const chatContainerRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    if (showChat && chatContainerRef.current) {
-      // Clear the container first
-      chatContainerRef.current.innerHTML = '';
-      
-      // Create and append the script
-      const script = document.createElement("script");
-      script.src = "https://bots.easy-peasy.ai/chat.min.js";
-      script.defer = true;
-      script.setAttribute("data-chat-url", "https://bots.easy-peasy.ai/bot/6fc51d13-714c-4afd-bf29-1ef67377b663");
-      script.setAttribute("data-btn-position", "bottom-right");
-      script.setAttribute("data-widget-btn-color", "#6366f1");
-      
-      chatContainerRef.current.appendChild(script);
-    }
-  }, [showChat]);
+
 
   return (
     <>
@@ -34,7 +19,7 @@ export const AIAssistanceCard = () => {
               <div className="w-8 h-8 rounded-full bg-gradient-to-br from-purple-500 to-indigo-500 flex items-center justify-center mr-2">
                 <Bot className="w-4 h-4 text-white" />
               </div>
-              <h2 className="text-lg font-bold text-foreground">AI Assistant</h2>
+<h2 className="text-lg font-bold text-foreground">Spandana Assistant</h2>
             </div>
             <Sparkles className="w-5 h-5 text-purple-500" />
           </div>
@@ -43,14 +28,14 @@ export const AIAssistanceCard = () => {
         <div className="p-6 flex-1 flex flex-col justify-between">
           <div className="mb-4">
             <p className="text-foreground/80 text-center">
-              Get personalized assistance with my portfolio
+              Ask anything about this portfolio & projects
             </p>
           </div>
           
           <button 
             className="w-full py-3 bg-gradient-to-r from-purple-500 to-indigo-500 text-primary-foreground rounded-lg font-medium hover:opacity-90 transition-opacity"
           >
-            Chat with AI Assistant
+            Chat with Spandana
           </button>
         </div>
       </div>
@@ -64,7 +49,7 @@ export const AIAssistanceCard = () => {
                 <div className="w-8 h-8 rounded-full bg-gradient-to-br from-purple-500 to-indigo-500 flex items-center justify-center mr-2">
                   <Bot className="w-4 h-4 text-white" />
                 </div>
-                <h2 className="text-xl font-bold text-foreground">Portfolio AI Assistant</h2>
+<h2 className="text-xl font-bold text-foreground">Spandana Personal Assistant</h2>
               </div>
               <button 
                 onClick={() => setShowChat(false)}
@@ -85,7 +70,7 @@ export const AIAssistanceCard = () => {
                 <div className="h-full flex items-center justify-center">
                   <div className="text-center">
                     <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-purple-500 mx-auto mb-4"></div>
-                    <p className="text-foreground">Loading AI Assistant...</p>
+                    <p className="text-foreground">Loading Spandana Assistant...</p>
                   </div>
                 </div>
               </div>

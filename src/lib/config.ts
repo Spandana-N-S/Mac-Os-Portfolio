@@ -1,8 +1,7 @@
-
 export const config = {
     terminal: {
         welcomeMessages: [
-            "Welcome to Nathishwar's Portfolio Terminal",
+            "Welcome to Spandana's Portfolio Terminal",
             "Type 'help' to see available commands",
             "Explore my projects, skills, and experiences",
             "Use 'about' to learn more about me",
@@ -32,9 +31,9 @@ export const config = {
         }
     },
     meta: {
-        title: "Nathishwar | AI-Powered Full Stack Developer",
-        description: "Interactive terminal-style portfolio of Nathishwar C, an AI-Powered Full Stack Developer specializing in React, Node.js, and Python automation.",
-        author: "Nathishwar C",
-        twitterHandle: "@nathishwarc"
+        title: "Spandana N S | Front-end Software Engineer",
+        description: "Interactive terminal-style portfolio of Spandana N S, Front-end Software Engineer specializing in React, Next.js, and TypeScript.",
+        author: "Spandana N S",
+        login: "Spandana-N-S"
     }
 };

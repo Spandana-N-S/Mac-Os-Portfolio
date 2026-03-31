@@ -70,8 +70,8 @@ export const Resume = () => {
               <div className="space-y-3">
                 <div className="flex items-center">
                   <span className="font-medium w-24 text-[#E7ECF4]">Email:</span>
-                  <a href={`mailto:${portfolioData.contact.email}`} className="text-[#A3B1C4] hover:text-[#4DA8FF] transition-colors">
-                    {portfolioData.contact.email}
+                  <a href="mailto:spandanans28@gmail.com" className="text-[#A3B1C4] hover:text-[#4DA8FF] transition-colors">
+                    spandanans28@gmail.com
                   </a>
                 </div>
                 <div className="flex items-center">
@@ -106,8 +106,42 @@ export const Resume = () => {
             </p>
           </div>
 
+          {/* PDF VIEWER - PROMINENT */}
+          <div className="mt-12">
+            <h2 className="text-3xl font-bold mb-8 border-b border-white/20 pb-4 text-center flex items-center justify-center gap-3">
+              📄 <span>Spandana Resume PDF</span>
+            </h2>
+            <div className="bg-gradient-to-br from-slate-900/90 to-slate-800/70 rounded-3xl p-6 border border-white/20 shadow-2xl backdrop-blur-xl max-w-6xl mx-auto">
+              <iframe 
+                src="/Spandana_Resume.pdf#toolbar=0&navpanes=0&scrollbar=0" 
+                className="w-full h-[70vh] lg:h-[80vh] rounded-2xl border-0 shadow-2xl"
+                title="Spandana Resume PDF Viewer"
+              />
+              <div className="flex flex-col sm:flex-row gap-4 mt-6 pt-6 border-t border-white/10 justify-center">
+                <a 
+                  href="/Spandana_Resume.pdf" 
+                  download 
+                  className="px-8 py-3 bg-gradient-to-r from-blue-500 to-blue-600 text-white font-semibold rounded-2xl shadow-lg hover:shadow-xl transition-all flex items-center gap-2 mx-auto sm:mx-0"
+                >
+                  📥 Download PDF
+                </a>
+                <a 
+                  href="/Spandana_Resume.pdf" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="px-8 py-3 bg-gradient-to-r from-emerald-500 to-emerald-600 text-white font-semibold rounded-2xl shadow-lg hover:shadow-xl transition-all flex items-center gap-2 mx-auto sm:mx-0"
+                >
+                  🔗 Open Fullscreen
+                </a>
+              </div>
+              <p className="text-center text-xs text-slate-400 mt-4 opacity-80">
+                * Zoom/Pan with browser controls. Download for printing.
+              </p>
+            </div>
+          </div>
+
           {/* SKILLS */}
-          <div className="mt-10">
+          <div className="mt-16">
             <h2 className="text-2xl font-bold mb-4 border-b border-white/10 pb-2">
               Skills
             </h2>
@@ -177,7 +211,11 @@ export const Resume = () => {
               Projects
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {portfolioData.projects.map((project, index) => (
+{portfolioData.projects.map((project, index) => {
+                  const descList = Array.isArray(project.description) ? project.description.map((desc, i) => (
+                    <li key={i}>{desc}</li>
+                  )) : <p>{project.description}</p>;
+                  return (
                 <div 
                   key={index}
                   className="
@@ -190,9 +228,7 @@ export const Resume = () => {
                   <h3 className="text-xl font-bold text-[#E7ECF4]">{project.title}</h3>
                   <p className="text-md text-[#4DA8FF] mb-2">{project.subtitle}</p>
                   <ul className="list-disc list-inside space-y-1 text-[#A3B1C4] pl-2 mb-4">
-                    {project.description.map((desc, i) => (
-                      <li key={i}>{desc}</li>
-                    ))}
+                    {descList}
                   </ul>
                   <div className="mt-auto pt-2">
                     <a 
@@ -205,7 +241,8 @@ export const Resume = () => {
                     </a>
                   </div>
                 </div>
-              ))}
+                  );
+                })}
             </div>
           </div>
 

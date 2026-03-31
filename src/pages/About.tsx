@@ -49,7 +49,7 @@ export const About = () => {
               {/* Image Container */}
               <div className="w-72 h-72 md:w-96 md:h-96 rounded-full overflow-hidden border-4 border-black/50 relative z-10">
                 <img
-                  src="/Perfect_dp_1.jpg"
+src="https://avatars.githubusercontent.com/u/162956154?v=4"
                   alt={portfolioData.about.name}
                   className="w-full h-full object-cover object-top filter grayscale group-hover:grayscale-0 transition-all duration-500"
                   onError={(e) => {
@@ -87,10 +87,6 @@ export const About = () => {
 
             <div className="flex flex-wrap gap-4 pt-4">
               {/* Quick Stats/Tags */}
-              <div className="flex items-center gap-2 px-4 py-2 bg-white/5 rounded-lg border border-white/10 hover:border-cyan-500/50 transition-colors cursor-default">
-                <Cpu className="w-4 h-4 text-cyan-400" />
-                <span className="text-sm">AI Engineer</span>
-              </div>
               <div className="flex items-center gap-2 px-4 py-2 bg-white/5 rounded-lg border border-white/10 hover:border-purple-500/50 transition-colors cursor-default">
                 <Code2 className="w-4 h-4 text-purple-400" />
                 <span className="text-sm">Full Stack</span>
@@ -138,11 +134,11 @@ export const About = () => {
                 <div className="absolute -left-[37px] w-4 h-4 rounded-full bg-purple-500 border-4 border-[#050507] group-hover:scale-125 transition-transform" />
                 <div className="bg-[#0D1A2B] p-6 rounded-xl border border-white/10 relative hover:-translate-y-1 transition-transform hover:shadow-[0_0_20px_rgba(168,85,247,0.15)]">
                   <div className="absolute -left-2 top-6 w-2 h-2 bg-[#0D1A2B] rotate-45 border-l border-b border-white/10" />
-                  <div className="text-xs text-purple-400 font-mono mb-1">2023 - Present</div>
-                  <h3 className="text-lg font-bold text-white mb-1">B.Tech AI & Data Science</h3>
-                  <p className="text-slate-400 text-sm">Dhanalakshmi Srinivasan Engineering College</p>
+                  <div className="text-xs text-purple-400 font-mono mb-1">2021 - 2024</div>
+                  <h3 className="text-lg font-bold text-white mb-1">Bachelors in Computer Applications</h3>
+                  <p className="text-slate-400 text-sm">Government First Grade College</p>
                   <div className="mt-3 px-3 py-1 bg-purple-500/10 text-purple-300 rounded text-xs w-fit">
-                    CGPA: 9.0 (Current)
+                    CGPA: 7.57 
                   </div>
                 </div>
               </div>
@@ -151,11 +147,11 @@ export const About = () => {
               <div className="relative group opacity-70 hover:opacity-100 transition-opacity">
                 <div className="absolute -left-[37px] w-4 h-4 rounded-full bg-slate-600 border-4 border-[#050507]" />
                 <div className="bg-[#121214] p-6 rounded-xl border border-white/5 relative">
-                  <div className="text-xs text-slate-500 font-mono mb-1">2021 - 2023</div>
-                  <h3 className="text-lg font-bold text-slate-200 mb-1">Bio Mathematics</h3>
-                  <p className="text-slate-500 text-sm">Marutham Matric Hr. Sec. School</p>
+                  <div className="text-xs text-slate-500 font-mono mb-1">2020 - 2021</div>
+                  <h3 className="text-lg font-bold text-slate-200 mb-1">CEBA</h3>
+                  <p className="text-slate-500 text-sm">St.Anthony's PU College</p>
                   <div className="mt-3 px-3 py-1 bg-slate-800 text-slate-400 rounded text-xs w-fit">
-                    Grade: 89.8%
+                    Grade: 86.8%
                   </div>
                 </div>
               </div>
@@ -191,9 +187,9 @@ export const About = () => {
                 <Mail className="w-4 h-4" /> Connect Protocol
               </h3>
               <div className="flex gap-4">
-                <a href={`https://${portfolioData.contact.github}`} className="p-2 rounded-lg bg-black/40 hover:text-white text-slate-400 hover:bg-black/60 transition-all"><Github className="w-5 h-5" /></a>
-                <a href={`https://${portfolioData.contact.linkedin}`} className="p-2 rounded-lg bg-black/40 hover:text-blue-400 text-slate-400 hover:bg-black/60 transition-all"><Linkedin className="w-5 h-5" /></a>
-                <a href={`https://${portfolioData.contact.instagram}`} className="p-2 rounded-lg bg-black/40 hover:text-pink-400 text-slate-400 hover:bg-black/60 transition-all"><Instagram className="w-5 h-5" /></a>
+                <a href={`https://${portfolioData.contact.github}`} target="_blank" rel="noopener noreferrer" className="p-2 rounded-lg bg-black/40 hover:text-white text-slate-400 hover:bg-black/60 transition-all"><Github className="w-5 h-5" /></a>
+                <a href={`https://${portfolioData.contact.linkedin}`} target="_blank" rel="noopener noreferrer" className="p-2 rounded-lg bg-black/40 hover:text-blue-400 text-slate-400 hover:bg-black/60 transition-all"><Linkedin className="w-5 h-5" /></a>
+                <a href={`https://${portfolioData.contact.instagram}`} target="_blank" rel="noopener noreferrer" className="p-2 rounded-lg bg-black/40 hover:text-pink-400 text-slate-400 hover:bg-black/60 transition-all"><Instagram className="w-5 h-5" /></a>
               </div>
             </div>
           </div>
