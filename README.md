@@ -4,7 +4,7 @@ https://mac-os-portfolio-git-main-spandana-n-s-projects.vercel.app/
 
 A futuristic, high-performance developer portfolio merging the aesthetics of a macOS terminal with advanced web technologies. Built with React, TypeScript, and Three.js, this application offers an immersive user experience through interactive command-line interfaces, 3D visualizations, and a sleek, responsive design.
 
-![Portfolio Preview](----------ADD PREVIEW------)
+![Portfolio Preview](https://mac-os-portfolio-git-main-spandana-n-s-projects.vercel.app/)
 
 ## 🌟 Key Features
 
