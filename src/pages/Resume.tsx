@@ -109,24 +109,24 @@ export const Resume = () => {
           {/* PDF VIEWER - PROMINENT */}
           <div className="mt-12">
             <h2 className="text-3xl font-bold mb-8 border-b border-white/20 pb-4 text-center flex items-center justify-center gap-3">
-              📄 <span>Spandana Resume PDF</span>
+              📄 <span>Spandana's Resume PDF</span>
             </h2>
             <div className="bg-gradient-to-br from-slate-900/90 to-slate-800/70 rounded-3xl p-6 border border-white/20 shadow-2xl backdrop-blur-xl max-w-6xl mx-auto">
               <iframe 
-                src="/Spandana_Resume.pdf#toolbar=0&navpanes=0&scrollbar=0" 
+src="/Spandana's-Resume.pdf#toolbar=0&navpanes=0&scrollbar=0"
                 className="w-full h-[70vh] lg:h-[80vh] rounded-2xl border-0 shadow-2xl"
                 title="Spandana Resume PDF Viewer"
               />
               <div className="flex flex-col sm:flex-row gap-4 mt-6 pt-6 border-t border-white/10 justify-center">
                 <a 
-                  href="/Spandana_Resume.pdf" 
+href="/Spandana's-Resume.pdf" 
                   download 
                   className="px-8 py-3 bg-gradient-to-r from-blue-500 to-blue-600 text-white font-semibold rounded-2xl shadow-lg hover:shadow-xl transition-all flex items-center gap-2 mx-auto sm:mx-0"
                 >
                   📥 Download PDF
                 </a>
                 <a 
-                  href="/Spandana_Resume.pdf" 
+href="/Spandana's-Resume.pdf" 
                   target="_blank" 
                   rel="noopener noreferrer"
                   className="px-8 py-3 bg-gradient-to-r from-emerald-500 to-emerald-600 text-white font-semibold rounded-2xl shadow-lg hover:shadow-xl transition-all flex items-center gap-2 mx-auto sm:mx-0"
