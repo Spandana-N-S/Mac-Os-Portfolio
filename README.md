@@ -1,4 +1,4 @@
-https://mac-os-portfolio-topaz-iota.vercel.app/
+https://mac-os-portfolio-git-main-spandana-n-s-projects.vercel.app/
 
 # 🚀 Spandana's Interactive Terminal Portfolio
 
