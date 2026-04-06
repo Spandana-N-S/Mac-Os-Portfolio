@@ -1,14 +1,20 @@
 import { portfolioData } from "@/lib/portfolioData";
 import { PixelCanvasDemo } from "@/components/ParallexComp";
 import { ProjectModal } from "@/components/ProjectModal";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { Search, Filter, Github } from "lucide-react";
 
 export const Projects = () => {
   const [selectedProject, setSelectedProject] = useState<any>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [projects, setProjects] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedTech, setSelectedTech] = useState<string | null>(null);
+
+  useEffect(() => {
+    portfolioData.getProjects().then(setProjects).catch(console.error).finally(() => setLoading(false));
+  }, []);
 
 // Helper to get tech array from subtitle
   const getTech = (project: any) => project.subtitle ? project.subtitle.split(',').map((t: string) => t.trim()).filter(Boolean) : [];
@@ -16,15 +22,15 @@ export const Projects = () => {
   // Get all unique technologies
   const allTechnologies = useMemo(() => {
     const techSet = new Set<string>();
-    portfolioData.projects.forEach(project => {
+    projects.forEach(project => {
       getTech(project).forEach(tech => techSet.add(tech));
     });
     return Array.from(techSet).sort();
-  }, []);
+  }, [projects]);
 
   // Filter projects based on search term and selected technology
   const filteredProjects = useMemo(() => {
-    return portfolioData.projects.filter(project => {
+    return projects.filter(project => {
       const matchesSearch = project.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
                            project.description.toLowerCase().includes(searchTerm.toLowerCase());
       
@@ -33,7 +39,7 @@ export const Projects = () => {
       
       return matchesSearch && matchesTech;
     });
-  }, [searchTerm, selectedTech]);
+  }, [projects, searchTerm, selectedTech]);
 
   const handleProjectClick = (project: any) => {
     setSelectedProject(project);
@@ -107,11 +113,21 @@ export const Projects = () => {
           </div>
 
           {/* PROJECT GRID */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            {filteredProjects.map((project, index) => (
-              <div
-                key={index}
-                className="
+          {loading ? (
+            <div className="col-span-full grid place-items-center h-64">
+              <div>Loading GitHub projects...</div>
+            </div>
+          ) : filteredProjects.length === 0 ? (
+            <div className="col-span-full grid place-items-center h-64">
+              <div>No projects match your search.</div>
+            </div>
+          ) : (
+            <>
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                {filteredProjects.map((project, index) => (
+                  <div
+                  key={index}
+                  className="
                   rounded-2xl overflow-hidden transition-all duration-300
                   bg-gradient-to-br from-[#0D1A2B]/40 via-[#1F2D3D]/30 to-[#3C4B57]/30
                   border border-white/10 backdrop-blur-lg
@@ -209,6 +225,8 @@ export const Projects = () => {
               </div>
             ))}
           </div>
+            </>
+          )}
 
           {/* OPEN SOURCE CONTRIBUTIONS */}
           <div className="

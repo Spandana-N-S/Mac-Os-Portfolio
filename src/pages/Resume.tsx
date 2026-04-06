@@ -1,10 +1,25 @@
 // This is your updated Resume.tsx file
 
 import { portfolioData } from "@/lib/portfolioData";
+import { useState, useEffect } from "react";
 // You might need to import icons, e.g., from 'react-icons/fa'
 // import { FaGithub, FaLinkedin, FaEnvelope, FaGlobe } from 'react-icons/fa';
 
 export const Resume = () => {
+  const [projects, setProjects] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    portfolioData.getProjects().then((projs) => {
+      setProjects(projs);
+      setLoading(false);
+    }).catch(console.error);
+  }, []);
+
+  if (loading) {
+    return <div className="h-full flex items-center justify-center"><div>Loading projects...</div></div>;
+  }
+
   return (
     <div className="
       h-full overflow-y-auto p-8
@@ -113,20 +128,20 @@ export const Resume = () => {
             </h2>
             <div className="bg-gradient-to-br from-slate-900/90 to-slate-800/70 rounded-3xl p-6 border border-white/20 shadow-2xl backdrop-blur-xl max-w-6xl mx-auto">
               <iframe 
-src="/Spandana's-Resume.pdf#toolbar=0&navpanes=0&scrollbar=0"
+src="/Spandana_NS_Frontend_Engineer.pdf#toolbar=0&navpanes=0&scrollbar=0"
                 className="w-full h-[70vh] lg:h-[80vh] rounded-2xl border-0 shadow-2xl"
                 title="Spandana Resume PDF Viewer"
               />
               <div className="flex flex-col sm:flex-row gap-4 mt-6 pt-6 border-t border-white/10 justify-center">
                 <a 
-href="/Spandana's-Resume.pdf" 
+href="/Spandana_NS_Frontend_Engineer.pdf" 
                   download 
                   className="px-8 py-3 bg-gradient-to-r from-blue-500 to-blue-600 text-white font-semibold rounded-2xl shadow-lg hover:shadow-xl transition-all flex items-center gap-2 mx-auto sm:mx-0"
                 >
                   📥 Download PDF
                 </a>
                 <a 
-href="/Spandana's-Resume.pdf" 
+href="/Spandana_NS_Frontend_Engineer.pdf" 
                   target="_blank" 
                   rel="noopener noreferrer"
                   className="px-8 py-3 bg-gradient-to-r from-emerald-500 to-emerald-600 text-white font-semibold rounded-2xl shadow-lg hover:shadow-xl transition-all flex items-center gap-2 mx-auto sm:mx-0"
@@ -211,7 +226,7 @@ href="/Spandana's-Resume.pdf"
               Projects
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-{portfolioData.projects.map((project, index) => {
+{projects.map((project, index) => {
                   const descList = Array.isArray(project.description) ? project.description.map((desc, i) => (
                     <li key={i}>{desc}</li>
                   )) : <p>{project.description}</p>;

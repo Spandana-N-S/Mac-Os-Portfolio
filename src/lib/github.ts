@@ -46,7 +46,7 @@ export const fetchGitHubData = async (username: 'Spandana-N-S'): Promise<{
   const userResponse = await fetch(`${GITHUB_API_URL}/users/${username}`);
   const user = await userResponse.json();
   
-  const reposResponse = await fetch(`${GITHUB_API_URL}/users/${username}/repos?per_page=4&sort=updated`);
+  const reposResponse = await fetch(`${GITHUB_API_URL}/users/${username}/repos?sort=updated&per_page=100`);
   const repos = await reposResponse.json();
   
   const eventsResponse = await fetch(`${GITHUB_API_URL}/users/${username}/events?per_page=3`);
