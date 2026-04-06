@@ -166,12 +166,17 @@ src="https://avatars.githubusercontent.com/u/162956154?v=4"
             </h2>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              {[
-                { label: "AI & ML", desc: "Building intelligent agents", color: "bg-cyan-500" },
-                { label: "Web Development", desc: "Building websites", color: "bg-blue-500" },
-                { label: "Vibe Coding", desc: "Flow state programming", color: "bg-purple-500" },
-                { label: "Open Source", desc: "Community contributions", color: "bg-green-500" },
-                { label: "Futurism", desc: "Next-gen tech research", color: "bg-pink-500" }
+{[
+                { label: "Reading Tech Blogs", desc: "Stay updated with industry trends", color: "bg-blue-500" },
+                { label: "Frontend Frameworks", desc: "Exploring Vue, React, Next.js", color: "bg-purple-500" },
+                { label: "New Tools & Tech", desc: "Node.js, Express, GraphQL", color: "bg-green-500" },
+                { label: "Build Tools", desc: "Vite, Vue.js, npm, Webpack", color: "bg-orange-500" },
+                { label: "D3.js & Data Viz", desc: "Interactive visualizations", color: "bg-indigo-500" },
+                { label: "DOM Mastery", desc: "Core web fundamentals", color: "bg-yellow-500" },
+                { label: "Coding Practice", desc: "Algorithms & challenges", color: "bg-pink-500" },
+                { label: "Architecture Review", desc: "Design patterns analysis", color: "bg-teal-500" },
+                { label: "Mentorship", desc: "Guiding fellow developers", color: "bg-red-500" },
+                { label: "Tool Exploration", desc: "Constant learning curve", color: "bg-cyan-500" }
               ].map((item, idx) => (
                 <div key={idx} className="p-4 rounded-xl bg-white/5 border border-white/5 hover:bg-white/[0.08] transition-colors group">
                   <div className={`w-8 h-1 mb-3 rounded-full ${item.color} group-hover:w-16 transition-[width] duration-300`} />
@@ -179,6 +184,7 @@ src="https://avatars.githubusercontent.com/u/162956154?v=4"
                   <p className="text-xs text-slate-500 mt-1">{item.desc}</p>
                 </div>
               ))}
+
             </div>
 
             {/* Contact Mini-Card */}
